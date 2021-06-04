@@ -12,7 +12,6 @@ def flower():
                       {
                           'X': 'DDDDDDDD',
                           'D': 'DFF',
-                          # 'B': StochasticRule(((0.5, '+FB[-FB]'),(0.5, '-FB[+FB]'))),#'F+BF--FF+B',
                           'B': '[F+B--F+B]-B',
                           'C': 'L--L--L--L',
                           'L': 'S-S-S-S',
@@ -60,8 +59,6 @@ def rye():
 
     drawer.draw(description, offset=(0, -400))
     drawer.done()
-
-#Refer to flowers/plants in Latin
 
 if __name__ == '__main__':
     try:
