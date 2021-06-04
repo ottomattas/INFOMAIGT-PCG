@@ -50,10 +50,11 @@ def tumbleweed():
 
 def cherrytree():
     drawer = TurtleDrawer(10,1,20)
-    lsystem = LSystem('FFFFFFFXS',
+    lsystem = LSystem('XSK',
                       {
-                          'X' : StochasticRule(((0.8, 'XF'), (0.09, 'X[-S]F'), (0.09, 'X[+S]F'), (0.02, 'X[+S][-S]F'))),
-                          'S' : StochasticRule(((0.33,'SF[+SF]SF[-SF]SF'),(0.33,'SF[+SF]SF'),(0.34, 'SF[-SF]SF')))
+                          'X' : StochasticRule(((0.97, 'XF'), (0.01, 'X[-S]F'), (0.01, 'X[+S]F'), (0.01, 'X[+S][-S]F'))),
+                          'S' : 'SF[-SF]SF',
+                          'K' : 'F[+K][-K]FK'
                       })
     description = lsystem.evaluate(4)
 
