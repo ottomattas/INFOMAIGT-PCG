@@ -37,8 +37,8 @@ def tumbleweed():
     drawer = TurtleDrawer(5, 1, 26)
     lsystem = LSystem('FFFX',
         {
-            'F': StochasticRule(((0.5,'F-F[1+F]F[2-F]'),(0.3, 'F[1+FF]F[--F]'), (0.2,'FF[1++F]FF[2-F]'))),
-            'X': 'F-F[3++F]F[1-F]'
+            'F': StochasticRule(((0.5,'F-F[+F]F[-F]'),(0.3, 'F[+FF]F[--F]'), (0.2,'FF[++F]FF[-F]'))),
+            'X': 'F-F[++F]F[-F]'
         })
     description = lsystem.evaluate(4)
 
