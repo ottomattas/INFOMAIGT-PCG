@@ -48,6 +48,18 @@ def tumbleweed():
     drawer.draw(description, offset=(-100, 0))
     drawer.done()
 
+def cherrytree():
+    drawer = TurtleDrawer(10,1,20)
+    lsystem = LSystem('FFFFFFFXS',
+                      {
+                          'X' : StochasticRule(((0.8, 'XF'), (0.09, 'X[-S]F'), (0.09, 'X[+S]F'), (0.02, 'X[+S][-S]F'))),
+                          'S' : StochasticRule(((0.33,'SF[+SF]SF[-SF]SF'),(0.33,'SF[+SF]SF'),(0.34, 'SF[-SF]SF')))
+                      })
+    description = lsystem.evaluate(4)
+
+    drawer.draw(description, offset=(0, -400))
+    drawer.done()
+
 #Refer to flowers/plants in Latin
 
 if __name__ == '__main__':
@@ -56,6 +68,8 @@ if __name__ == '__main__':
             flower()
         elif sys.argv[1] == '2':
             tumbleweed()
+        elif sys.argv[1] == '3':
+            cherrytree()
     except IndexError:
         print('Use any of the following numerical arguments to see one of the following plants:\n'
               '1: Dandelion\n'
