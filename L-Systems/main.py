@@ -3,9 +3,33 @@
 from lindenmayer import LSystem, Rule, StochasticRule
 from draw import TurtleDrawer
 
-import math
+import math, sys
 
-def main():
+def flower():
+    drawer = TurtleDrawer(4,1,16)
+
+    lsystem = LSystem('X[B]C',
+                      {
+                          'X': 'DDDDDDDD',
+                          'D': 'DFF',
+                          # 'B': StochasticRule(((0.5, '+FB[-FB]'),(0.5, '-FB[+FB]'))),#'F+BF--FF+B',
+                          'B': '[F+B--F+B]-B',
+                          'C': 'L--L--L--L',
+                          'L': 'S-S-S-S',
+                          'S': '[A]-[A]-[A]-[A]-[A]-[A]',
+                          'A': StochasticRule(((0.7, 'DDD[+D][-D]D'), (0.2, 'DDD[+D][--F]F'), (0.1, 'DDD[--D]F')))
+                      })
+    description = lsystem.evaluate(9)
+    description2 = lsystem.evaluate(9)
+
+    # uncomment if you want to see the string you're drawing
+    # print(description)
+
+    drawer.draw(description, offset=(200, -400))
+    drawer.draw(description2, offset=(-200, -400), clear=False)
+    drawer.done()
+
+def tumbleweed():
     drawer = TurtleDrawer(5, 1, 26)
 
     #STEEL= X, {X : XDD, D : DFF}
@@ -41,4 +65,7 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    if sys.argv[1] == '1':
+        flower()
+    elif sys.argv[1] == '2':
+        tumbleweed()
