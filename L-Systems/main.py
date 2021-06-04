@@ -48,7 +48,7 @@ def tumbleweed():
     drawer.draw(description, offset=(-100, 0))
     drawer.done()
 
-def cherrytree():
+def rye():
     drawer = TurtleDrawer(10,1,20)
     lsystem = LSystem('XSK',
                       {
@@ -70,10 +70,9 @@ if __name__ == '__main__':
         elif sys.argv[1] == '2':
             tumbleweed()
         elif sys.argv[1] == '3':
-            cherrytree()
+            rye()
     except IndexError:
         print('Use any of the following numerical arguments to see one of the following plants:\n'
               '1: Dandelion\n'
               '2: Tumbleweed\n'
-              '3: Tree')
-
+              '3: Rye')
