@@ -34,13 +34,13 @@ def tumbleweed():
     Draws a tumbleweed
     :return: A single image of a randomly generated tumbleweed
     '''
-    drawer = TurtleDrawer(5, 1, 17)
+    drawer = TurtleDrawer(5, 1, 10)
     lsystem = LSystem('FFFX',
         {
-            'F': StochasticRule(((0.6,'F-F[+F]F[-F]'),(0.3, 'F[+FF]F[--F]'), (0.1,'FF[++F]FF[-F]'))),
+            'F': StochasticRule(((0.65,'F-F[+F]F[-F]'),(0.3, 'F[+FF]F[--F]'), (0.05,'FF[++F]FF[-F]'))),
             'X': 'F-F[++F]F[-F]'
         })
-    description = lsystem.evaluate(4)
+    description = lsystem.evaluate(5)
 
     # uncomment if you want to see the string you're drawing
     #print(description)
