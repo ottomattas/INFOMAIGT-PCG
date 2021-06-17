@@ -10,15 +10,15 @@ public class Coastline : MonoBehaviour
     Vector3[] vertices;
     int[] lines;
     public float islandHeight;
-    public float startingX;
-    public float startingZ;
+    public float centerX;
+    public float centerZ;
     // Start is called before the first frame update
     void Start()
     {
         ocean = GameObject.Find("Ocean");
         islandHeight = ocean.transform.position.y + 0.01f;
-        startingX = 0;
-        startingZ = 0;
+        centerX = 0;
+        centerZ = 0;
         mesh = new Mesh();
         GenerateCoastline();
         GenerateMesh();
@@ -31,10 +31,10 @@ public class Coastline : MonoBehaviour
         int zSize = 3;
         //int count = 0;
         vertices = new Vector3[]{
-            new Vector3(startingX,islandHeight,startingZ),
-            new Vector3(startingX,islandHeight,startingZ + zSize),
-            new Vector3(startingX + xSize,islandHeight,startingZ),
-            new Vector3(startingX + xSize,islandHeight,startingZ + zSize)
+            new Vector3(centerX - xSize/2,islandHeight,centerZ-zSize/2),
+            new Vector3(centerX - xSize/2, islandHeight,centerZ + zSize/ 2),
+            new Vector3(centerX + xSize/2,islandHeight,centerZ-zSize/2),
+            new Vector3(centerX + xSize/2,islandHeight,centerZ + zSize/2)
         };
         lines = new int[]{
             0,1,1,3,3,2,2,0
