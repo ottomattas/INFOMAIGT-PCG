@@ -42,11 +42,7 @@ public class Coastline : MonoBehaviour
                 verticeslist.Add(new Vector3(xSize, islandHeight, zSize));
                 lines.Add(count++);
             }
-        }
-        Vector3[] vertices = verticeslist.ToArray();
-        mesh.Clear();
-        mesh.vertices = vertices;
-        mesh.SetIndices(lines.ToArray(), MeshTopology.Lines, 0);*/
+        }*/
 
     }
 
