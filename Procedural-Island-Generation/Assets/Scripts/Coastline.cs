@@ -6,15 +6,15 @@ using UnityEngine;
 public class Coastline : MonoBehaviour
 {
     Mesh mesh;
-    //GameObject ocean;
+    GameObject ocean;
     Vector3[] vertices;
-    int[] triangles;
+    int[] lines;
     public float islandHeight;
     // Start is called before the first frame update
     void Start()
     {
-        //ocean = GameObject.Find("Ocean");
-        //islandHeight = ocean.transform.position.y + 0.01f;
+        ocean = GameObject.Find("Ocean");
+        islandHeight = ocean.transform.position.y + 0.01f;
         mesh = new Mesh();
         GenerateCoastline();
         GenerateMesh();
@@ -27,12 +27,13 @@ public class Coastline : MonoBehaviour
         //int zSize = 3;
         //int count = 0;
         vertices = new Vector3[]{
-            new Vector3(0,1,0),
-            new Vector3(0,1,1),
-            new Vector3(1,1,0)
+            new Vector3(0,islandHeight,0),
+            new Vector3(0,islandHeight,1),
+            new Vector3(1,islandHeight,0),
+            new Vector3(1,islandHeight,1)
         };
-        triangles = new int[]{
-            0,1,2
+        lines = new int[]{
+            0,1,1,3,3,2,2,0
         };
         /*for(int i = 0; i < xSize; i++)
         {
@@ -53,7 +54,7 @@ public class Coastline : MonoBehaviour
     {
         mesh.Clear();
         mesh.vertices = vertices;
-        mesh.triangles = triangles;
+        mesh.SetIndices(lines, MeshTopology.Lines, 0);
 
     }
 
