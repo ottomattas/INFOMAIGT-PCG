@@ -12,6 +12,8 @@ public class Coastline : MonoBehaviour
     public float islandHeight;
     public float centerX;
     public float centerZ;
+    public int xSize;
+    public int zSize;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,8 +29,8 @@ public class Coastline : MonoBehaviour
 
     void GenerateCoastline()
     {
-        int xSize = 4;
-        int zSize = 3;
+        xSize = 4;
+        zSize = 3;
         //int count = 0;
         vertices = new Vector3[]{
             new Vector3(centerX - xSize/2,islandHeight,centerZ-zSize/2),
