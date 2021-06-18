@@ -32,14 +32,18 @@ public class Coastline : MonoBehaviour
         xSize = 4;
         zSize = 3;
         //int count = 0;
-        vertices = new Vector3[]{
-            new Vector3(centerX - xSize/2,islandHeight,centerZ-zSize/2),
-            new Vector3(centerX - xSize/2, islandHeight,centerZ + zSize/ 2),
-            new Vector3(centerX + xSize/2,islandHeight,centerZ-zSize/2),
-            new Vector3(centerX + xSize/2,islandHeight,centerZ + zSize/2)
-        };
+        vertices = new Vector3[xSize*zSize];
+        int count = 0;
+        for (float i = centerX - xSize/2; i < centerX+ xSize/2; i++)
+        {
+            for (float j = centerZ - zSize/2; j < centerZ+zSize/2; j++)
+            {
+                vertices[count] = new Vector3(i,islandHeight,j);
+                count++;
+            }
+        }
         lines = new int[]{
-            0,1,1,3,3,2,2,0
+            0,1,1,3,3,5,5,7,7,9,9,11,11,10,10,8,8,6,6,4,4,2,2,0
         };
     }
 
