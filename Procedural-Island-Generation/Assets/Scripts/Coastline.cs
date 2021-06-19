@@ -6,7 +6,7 @@ using UnityEngine;
 public class Coastline : MonoBehaviour
 {
     Mesh mesh;
-    Vector3[] vertices;
+    public Vector3[] vertices;
     int[] lines;
     public float islandHeight;
     public float centerX;
@@ -30,31 +30,38 @@ public class Coastline : MonoBehaviour
     {
         xSize = 10;
         zSize = 10;
-        int count = (xSize + 1) * (zSize + 1);
-        Vector3[] RandomVertices = new Vector3[count];
+        int count = 100;
+        vertices = new Vector3[count];
         //How many vertices to place on the coastline
-        int token = 100;
+        //int token = 100;
         //Generate a first point
-        int counter = 0;
-        while (counter < token)
+        vertices[0] = new Vector3(centerX- xSize / 2, islandHeight, Random.Range(centerZ - zSize/2, centerZ + zSize/2));
+        int counter = 1;
+        Vector3 Left = vertices[0];
+        Vector3 Right = vertices[0];
+        bool leftDir = true;
+        while (counter < count)
         {
-            RandomVertices[counter] = new Vector3(Random.Range(centerX, centerX+xSize), islandHeight,
-                Random.Range(centerZ, centerZ+zSize));
-            counter++;
-
-        }
-        List<Vector3> VerticesList = new List<Vector3>();
-        foreach (Vector3 x in RandomVertices)
-        {
-            foreach (Vector3 y in RandomVertices)
+            if (leftDir)
             {
-                VerticesList.Add(x-y);
+                Vector3 DirectionVector = new Vector3(Random.Range(0f,1f),islandHeight,Random.Range(0f,1f));
+                Vector3 tempvector = Vector3.Scale(DirectionVector, Left);
+                vertices[counter] = tempvector;
+                Left = vertices[counter];
+                counter++;
+                leftDir = !leftDir;
+            }
+            else
+            {
+                Vector3 DirectionVector = new Vector3(Random.Range(0f,1f),islandHeight,Random.Range(0f,1f));
+                Vector3 tempvector = Vector3.Scale(DirectionVector, Right);
+                vertices[counter] = tempvector;
+                Right = vertices[counter];
+                counter++;
+                leftDir = !leftDir;
             }
         }
-        vertices = VerticesList.ToArray();
-
         //While not out of tokens, generate points next to them
-        
     }
 
     void GenerateMesh()
@@ -65,10 +72,6 @@ public class Coastline : MonoBehaviour
 
     void OnDrawGizmosSelected()
     {
-        if (!Application.isPlaying)
-        {
-            return;
-        }
         Gizmos.color = Color.black;
         for (int i = 0; i < vertices.Length; i++)
         {
