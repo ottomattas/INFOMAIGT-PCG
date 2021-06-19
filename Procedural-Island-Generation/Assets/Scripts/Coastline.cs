@@ -11,8 +11,12 @@ public class Coastline : MonoBehaviour
     public float islandHeight;
     public float centerX;
     public float centerZ;
-    public int xSize;
-    public int zSize;
+    public float xSize;
+    public float zSize;
+    public float minX;
+    public float maxX;
+    public float minZ;
+    public float maxZ;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,6 +24,12 @@ public class Coastline : MonoBehaviour
         islandHeight = ocean.transform.position.y + 0.01f;
         centerX = 0;
         centerZ = 0;
+        xSize = 10;
+        zSize = 10;
+        minX = centerX - xSize / 2;
+        maxX = centerX + xSize / 2;
+        minZ = centerZ - zSize / 2;
+        maxZ = centerZ + zSize / 2;
         mesh = new Mesh();
         GenerateCoastline();
         GenerateMesh();
@@ -28,40 +38,41 @@ public class Coastline : MonoBehaviour
 
     void GenerateCoastline()
     {
-        xSize = 10;
-        zSize = 10;
-        int count = 100;
-        vertices = new Vector3[count];
+        //TODO: 
+        //
+        List<Vector3> tempvertices = new List<Vector3>();
+        for (float i = minZ; i < maxZ + 1; i++)
+        {
+            for (float j = minX; j < maxX + 1; j++)
+            {
+                tempvertices.Add(new Vector3(j, islandHeight, i));
+            }
+        }
+        while (true)
+        {
+            int index = Random.Range(0, tempvertices.Count);
+            Vector3 Random_Selected = tempvertices[index];
+            //Check if it is on an edge, how do we do this?
+            //An edge has no value either on x - 1, x + 1, z - 1 or z + 1
+            if (Random_Selected.x == minX || Random_Selected.x == maxX || Random_Selected.z == minZ || Random_Selected.z == maxZ)
+            {
+                //It is on the border, select next 
+                break;
+            }
+        }
+        
+        int count = 20;
         //How many vertices to place on the coastline
         //int token = 100;
         //Generate a first point
-        vertices[0] = new Vector3(centerX- xSize / 2, islandHeight, Random.Range(centerZ - zSize/2, centerZ + zSize/2));
-        int counter = 1;
-        Vector3 Left = vertices[0];
-        Vector3 Right = vertices[0];
-        bool leftDir = true;
-        while (counter < count)
+        int counter = 0;
+        /*while (counter < count)
         {
-            if (leftDir)
-            {
-                Vector3 DirectionVector = new Vector3(Random.Range(0f,1f),islandHeight,Random.Range(0f,1f));
-                Vector3 tempvector = Vector3.Scale(DirectionVector, Left);
-                vertices[counter] = tempvector;
-                Left = vertices[counter];
-                counter++;
-                leftDir = !leftDir;
-            }
-            else
-            {
-                Vector3 DirectionVector = new Vector3(Random.Range(0f,1f),islandHeight,Random.Range(0f,1f));
-                Vector3 tempvector = Vector3.Scale(DirectionVector, Right);
-                vertices[counter] = tempvector;
-                Right = vertices[counter];
-                counter++;
-                leftDir = !leftDir;
-            }
-        }
-        //While not out of tokens, generate points next to them
+            vertices[counter] = new Vector3(Random.Range(minX, maxX), islandHeight, Random.Range(minZ, maxZ));
+            counter++;
+
+        }*/
+        vertices = tempvertices.ToArray();
     }
 
     void GenerateMesh()
@@ -84,4 +95,35 @@ public class Coastline : MonoBehaviour
     {
         
     }*/
+}
+
+class CoastAgent
+{
+    Vector3 seed;
+    Vector3 direction;
+    public int tokens;
+    Vector3 attractor;
+    Vector3 repulsor;
+    public CoastAgent(Vector3 seed, int tokens, float minX, float maxX, float minZ, float maxZ, float islandHeight)
+    {
+        this.seed = seed;
+        this.direction = Random.insideUnitCircle;
+        this.tokens = tokens;
+        this.attractor = new Vector3(Random.Range(minX,maxX), islandHeight, Random.Range(minZ, maxZ));
+        while (true)
+        {
+            Vector3 temprepulsor = new Vector3(Random.Range(minX, maxX), islandHeight, Random.Range(minZ, maxZ));
+            if (Vector3.Angle(attractor, temprepulsor) >= 15.0f)
+            {
+                this.repulsor = temprepulsor;
+                break;
+            }
+        }
+
+    }
+    
+    public float score(Vector3 EvaluationPoint)
+    {
+        return Vector3.Distance(repulsor, EvaluationPoint) - Vector3.Distance(attractor, EvaluationPoint);
+    }
 }
