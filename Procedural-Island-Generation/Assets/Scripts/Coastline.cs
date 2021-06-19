@@ -6,7 +6,6 @@ using UnityEngine;
 public class Coastline : MonoBehaviour
 {
     Mesh mesh;
-    GameObject ocean;
     Vector3[] vertices;
     int[] lines;
     public float islandHeight;
@@ -17,7 +16,7 @@ public class Coastline : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        ocean = GameObject.Find("Ocean");
+        GameObject ocean = GameObject.Find("Ocean");
         islandHeight = ocean.transform.position.y + 0.01f;
         centerX = 0;
         centerZ = 0;
@@ -29,30 +28,43 @@ public class Coastline : MonoBehaviour
 
     void GenerateCoastline()
     {
-        xSize = 4;
-        zSize = 3;
-        //int count = 0;
-        vertices = new Vector3[xSize*zSize];
-        int count = 0;
-        for (float i = centerX - xSize/2; i < centerX+ xSize/2; i++)
+        xSize = 10;
+        zSize = 10;
+        int count = (xSize + 1) * (zSize + 1);
+        vertices = new Vector3[count];
+        int counter = 0;
+        //How many vertices to place on the coastline
+        int token = 100;
+        //Generate a first point
+        while (counter < token)
         {
-            for (float j = centerZ - zSize/2; j < centerZ+zSize/2; j++)
-            {
-                vertices[count] = new Vector3(i,islandHeight,j);
-                count++;
-            }
+            vertices[counter] = new Vector3(Random.Range(centerX, centerX+xSize), islandHeight,
+                Random.Range(centerZ, centerZ+zSize));
+            counter++;
+
         }
-        lines = new int[]{
-            0,1,1,3,3,5,5,7,7,9,9,11,11,10,10,8,8,6,6,4,4,2,2,0
-        };
+
+        //While not out of tokens, generate points next to them
+        
     }
 
     void GenerateMesh()
     {
         mesh.Clear();
         mesh.vertices = vertices;
-        mesh.SetIndices(lines, MeshTopology.Lines, 0);
+    }
 
+    void OnDrawGizmosSelected()
+    {
+        if (!Application.isPlaying)
+        {
+            return;
+        }
+        Gizmos.color = Color.black;
+        for (int i = 0; i < vertices.Length; i++)
+        {
+            Gizmos.DrawSphere(vertices[i], 0.1f);
+        }
     }
 
     // Update is called once per frame
