@@ -31,18 +31,27 @@ public class Coastline : MonoBehaviour
         xSize = 10;
         zSize = 10;
         int count = (xSize + 1) * (zSize + 1);
-        vertices = new Vector3[count];
-        int counter = 0;
+        Vector3[] RandomVertices = new Vector3[count];
         //How many vertices to place on the coastline
         int token = 100;
         //Generate a first point
+        int counter = 0;
         while (counter < token)
         {
-            vertices[counter] = new Vector3(Random.Range(centerX, centerX+xSize), islandHeight,
+            RandomVertices[counter] = new Vector3(Random.Range(centerX, centerX+xSize), islandHeight,
                 Random.Range(centerZ, centerZ+zSize));
             counter++;
 
         }
+        List<Vector3> VerticesList = new List<Vector3>();
+        foreach (Vector3 x in RandomVertices)
+        {
+            foreach (Vector3 y in RandomVertices)
+            {
+                VerticesList.Add(x-y);
+            }
+        }
+        vertices = VerticesList.ToArray();
 
         //While not out of tokens, generate points next to them
         
