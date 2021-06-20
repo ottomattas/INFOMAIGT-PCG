@@ -7,6 +7,7 @@ public class Coastline : MonoBehaviour
 {
     Mesh mesh;
     public Vector3[] vertices;
+    public List<Vector3> allPossibleVertices;
     int[] lines;
     public float islandHeight;
     public float centerX;
@@ -17,6 +18,8 @@ public class Coastline : MonoBehaviour
     public float maxX;
     public float minZ;
     public float maxZ;
+    public float maxXSize;
+    public float maxZSize;
     // Start is called before the first frame update
     void Start()
     {
@@ -30,6 +33,15 @@ public class Coastline : MonoBehaviour
         maxX = centerX + xSize / 2;
         minZ = centerZ - zSize / 2;
         maxZ = centerZ + zSize / 2;
+        maxXSize = 50;
+        maxZSize = 50;
+        for (float i = centerX - maxXSize / 2; i < centerX + maxXSize / 2; i++)
+        {
+            for (float j = centerZ - maxZSize / 2; j < centerZ + maxZSize; j++)
+            {
+                allPossibleVertices.Add(new Vector3(i, islandHeight, j));
+            }
+        }
         mesh = new Mesh();
         GenerateCoastline();
         GenerateMesh();
@@ -41,15 +53,17 @@ public class Coastline : MonoBehaviour
         //TODO: 
         //
         List<Vector3> tempvertices = new List<Vector3>();
-        for (float i = minZ; i < maxZ + 1; i++)
+        for (int i = 0; i < allPossibleVertices.Count; i++)
         {
-            for (float j = minX; j < maxX + 1; j++)
+            if (allPossibleVertices[i].x >= minX && allPossibleVertices[i].x <= maxX &&
+            allPossibleVertices[i].z >= minZ && allPossibleVertices[i].z <= maxZ)
             {
-                tempvertices.Add(new Vector3(j, islandHeight, i));
+                tempvertices.Add(allPossibleVertices[i]);
             }
         }
         while (true)
         {
+            break;
             int index = Random.Range(0, tempvertices.Count);
             Vector3 Random_Selected = tempvertices[index];
             //Check if it is on an edge, how do we do this?
