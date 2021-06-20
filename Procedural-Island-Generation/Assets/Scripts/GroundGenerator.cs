@@ -1,82 +1,96 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class GroundGenerator : MonoBehaviour
-{
-    // Define a new mesh
+// Require a Mesh Filter on the same object as this script
+[RequireComponent(typeof(MeshFilter))]
+
+public class TerrainGenerator : MonoBehaviour
+{   
+
+    // Create an variable for an array of vertices with 3 points each
+    Vector3[] vertices;
+
+    // Create a variable for an array of triangles 
+    int [] triangles;
+
+    // Create a variable of type Mesh
     Mesh mesh;
 
-    // Define arrays for vertices and triangles
-    Vector3[] vertices;
-    int[] triangles;
-
-    // Define parameters for defining the grid size
+    // Define parameters for the grid size
     public int xSize = 20;
     public int zSize = 20;
 
-    // Start is called before the first frame update
-    void Start(){
-        // Create a new mesh
+    // Use this for intialization
+    void Start () {
+        // Create a new mesh object
         mesh = new Mesh();
-        // Call it in the mesh filter
+        // Store the mesh object in the Mesh Filter
         GetComponent<MeshFilter>().mesh = mesh;
-
-        StartCoroutine(CreateShape());
-    }
-
-    void Update(){
+        // Create a new shape regular
+        CreateShape();
+        // Update mesh with the new shape
         UpdateMesh();
     }
 
-    // Define a method for creating a shape
-    IEnumerator CreateShape(){
-
-        // Define a new Vector3 array with the size of the vertex count 
+    // Function to create a new shape
+    void CreateShape () {
+        // Create a new array of vertices with the maximum size
         vertices = new Vector3[(xSize + 1) * (zSize + 1)];
+        // Create an index for accessing a vertex
+        int i = 0;
 
-        // Loop over the vertices from left to right; top to bottom
-        // to give the vertices a position in the grid.
-        for (int i = 0, z = 0; z <= zSize; z++){
-            for (int x = 0; x <= xSize; x++){
-                // Define a y parameter
+        // Assign positions for each of the points of the vertices,
+        // starting from bottom left to right by row
+        for (int z = 0; z <= zSize; z++) {
+            for (int x = 0; x <= xSize; x++) {
+                // Create a new variable for the height of the vertex
                 float y = Mathf.PerlinNoise(x * .3f, z * .3f) * 2f;
+                // Access each vertex and give a new array of position points
                 vertices[i] = new Vector3(x, y, z);
+                // Count a vertex
                 i++;
             }
         }
 
+        // Create a new triangles array with the maximum size
         triangles = new int[xSize * zSize * 6];
-
-        // Keep track of the vertices array
+        // Create an index for accessing a vertex
         int vert = 0;
-        // Keep track of the triangle array
+        // Create an index for accessing a triangle
         int tris = 0;
 
-        // Loop over all the squares to give triangle coordinates
-        for (int z = 0; z < zSize; z++){
-            for (int x = 0; x < xSize; x++){
+        // Iterate over the squares on the Z-axis
+        for (int z = 0; z < zSize; z++) {
+            // Iterate over the squares on the X-axis
+            for (int x = 0; x < xSize; x++) {
+                // Store coordinates for the corners; first triangle
                 triangles[tris + 0] = vert + 0;
                 triangles[tris + 1] = vert + xSize + 1;
                 triangles[tris + 2] = vert + 1;
+                // Store coordinates for the corners; second triangle
                 triangles[tris + 3] = vert + 1;
                 triangles[tris + 4] = vert + xSize + 1;
                 triangles[tris + 5] = vert + xSize + 2;
-
+                // Count a vertex and a triangle
                 vert++;
                 tris += 6;
-
-                yield return new WaitForSeconds(.1f);
             }
+            // Count an extra vertex at the end of each row
             vert++;
-        }
+        }        
     }
 
-    void UpdateMesh(){
+    // Function to update mesh with the new shape
+    void UpdateMesh () {
+        // Clear mesh from previous data
         mesh.Clear();
-
+        // Input vertices array
         mesh.vertices = vertices;
+        // Input triangles array
         mesh.triangles = triangles;
-
+        // Recalculate normals for proper lighting
         mesh.RecalculateNormals();
     }
+
 }
