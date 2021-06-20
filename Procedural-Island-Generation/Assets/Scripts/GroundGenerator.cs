@@ -1,96 +1,128 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
+using ProceduralToolkit.FastNoiseLib;
 using UnityEngine;
+using UnityEngine.Assertions;
+using Random = UnityEngine.Random;
 
-// Require a Mesh Filter on the same object as this script
-[RequireComponent(typeof(MeshFilter))]
+// public class GroundGenerator : MonoBehaviour
+// {
+//     private void Update()
+//     {
+//         Debug.Log(string.Format("<color=#{0}>{0}</color>", RandomE.colorHSV.ToHtmlStringRGB()));
+//     }
+// }
 
-public class GroundGenerator : MonoBehaviour
-{   
-
-    // Create an variable for an array of vertices with 3 points each
-    Vector3[] vertices;
-
-    // Create a variable for an array of triangles 
-    int [] triangles;
-
-    // Create a variable of type Mesh
-    Mesh mesh;
-
-    // Define parameters for the grid size
-    public int xSize = 20;
-    public int zSize = 20;
-
-    // Use this for intialization
-    void Start () {
-        // Create a new mesh object
-        mesh = new Mesh();
-        // Store the mesh object in the Mesh Filter
-        GetComponent<MeshFilter>().mesh = mesh;
-        // Create a new shape regular
-        CreateShape();
-        // Update mesh with the new shape
-        UpdateMesh();
+/// <summary>
+/// A simple low poly terrain generator based on fractal noise
+/// </summary>
+public static class GroundGenerator
+{
+    [Serializable]
+    public class Config
+    {
+        public Vector3 terrainSize = new Vector3(32, 5, 32);
+        public float cellSize = 0.5f;
+        public float noiseFrequency = 4;
+        public Gradient gradient = ColorE.Gradient(Color.black, Color.white);
     }
 
-    // Function to create a new shape
-    void CreateShape () {
-        // Create a new array of vertices with the maximum size
-        vertices = new Vector3[(xSize + 1) * (zSize + 1)];
-        // Create an index for accessing a vertex
-        int i = 0;
+    public static MeshDraft TerrainDraft(Config config)
+    {
+        Assert.IsTrue(config.terrainSize.x > 0);
+        Assert.IsTrue(config.terrainSize.z > 0);
+        Assert.IsTrue(config.cellSize > 0);
 
-        // Assign positions for each of the points of the vertices,
-        // starting from bottom left to right by row
-        for (int z = 0; z <= zSize; z++) {
-            for (int x = 0; x <= xSize; x++) {
-                // Create a new variable for the height of the vertex
-                float y = Mathf.PerlinNoise(x * .3f, z * .3f) * 2f;
-                // Access each vertex and give a new array of position points
-                vertices[i] = new Vector3(x, y, z);
-                // Count a vertex
-                i++;
+        var noiseOffset = new Vector2(Random.Range(0f, 100f), Random.Range(0f, 100f));
+
+        int xSegments = Mathf.FloorToInt(config.terrainSize.x/config.cellSize);
+        int zSegments = Mathf.FloorToInt(config.terrainSize.z/config.cellSize);
+
+        float xStep = config.terrainSize.x/xSegments;
+        float zStep = config.terrainSize.z/zSegments;
+        int vertexCount = 6*xSegments*zSegments;
+        var draft = new MeshDraft
+        {
+            name = "Terrain",
+            vertices = new List<Vector3>(vertexCount),
+            triangles = new List<int>(vertexCount),
+            normals = new List<Vector3>(vertexCount),
+            colors = new List<Color>(vertexCount)
+        };
+
+        for (int i = 0; i < vertexCount; i++)
+        {
+            draft.vertices.Add(Vector3.zero);
+            draft.triangles.Add(0);
+            draft.normals.Add(Vector3.zero);
+            draft.colors.Add(Color.black);
+        }
+
+        var noise = new FastNoise();
+        noise.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
+        noise.SetFrequency(config.noiseFrequency);
+
+        for (int x = 0; x < xSegments; x++)
+        {
+            for (int z = 0; z < zSegments; z++)
+            {
+                int index0 = 6*(x + z*xSegments);
+                int index1 = index0 + 1;
+                int index2 = index0 + 2;
+                int index3 = index0 + 3;
+                int index4 = index0 + 4;
+                int index5 = index0 + 5;
+
+                float height00 = GetHeight(x + 0, z + 0, xSegments, zSegments, noiseOffset, noise);
+                float height01 = GetHeight(x + 0, z + 1, xSegments, zSegments, noiseOffset, noise);
+                float height10 = GetHeight(x + 1, z + 0, xSegments, zSegments, noiseOffset, noise);
+                float height11 = GetHeight(x + 1, z + 1, xSegments, zSegments, noiseOffset, noise);
+
+                var vertex00 = new Vector3((x + 0)*xStep, height00*config.terrainSize.y, (z + 0)*zStep);
+                var vertex01 = new Vector3((x + 0)*xStep, height01*config.terrainSize.y, (z + 1)*zStep);
+                var vertex10 = new Vector3((x + 1)*xStep, height10*config.terrainSize.y, (z + 0)*zStep);
+                var vertex11 = new Vector3((x + 1)*xStep, height11*config.terrainSize.y, (z + 1)*zStep);
+
+                draft.vertices[index0] = vertex00;
+                draft.vertices[index1] = vertex01;
+                draft.vertices[index2] = vertex11;
+                draft.vertices[index3] = vertex00;
+                draft.vertices[index4] = vertex11;
+                draft.vertices[index5] = vertex10;
+
+                draft.colors[index0] = config.gradient.Evaluate(height00);
+                draft.colors[index1] = config.gradient.Evaluate(height01);
+                draft.colors[index2] = config.gradient.Evaluate(height11);
+                draft.colors[index3] = config.gradient.Evaluate(height00);
+                draft.colors[index4] = config.gradient.Evaluate(height11);
+                draft.colors[index5] = config.gradient.Evaluate(height10);
+
+                Vector3 normal000111 = Vector3.Cross(vertex01 - vertex00, vertex11 - vertex00).normalized;
+                Vector3 normal001011 = Vector3.Cross(vertex11 - vertex00, vertex10 - vertex00).normalized;
+
+                draft.normals[index0] = normal000111;
+                draft.normals[index1] = normal000111;
+                draft.normals[index2] = normal000111;
+                draft.normals[index3] = normal001011;
+                draft.normals[index4] = normal001011;
+                draft.normals[index5] = normal001011;
+
+                draft.triangles[index0] = index0;
+                draft.triangles[index1] = index1;
+                draft.triangles[index2] = index2;
+                draft.triangles[index3] = index3;
+                draft.triangles[index4] = index4;
+                draft.triangles[index5] = index5;
             }
         }
 
-        // Create a new triangles array with the maximum size
-        triangles = new int[xSize * zSize * 6];
-        // Create an index for accessing a vertex
-        int vert = 0;
-        // Create an index for accessing a triangle
-        int tris = 0;
-
-        // Iterate over the squares on the Z-axis
-        for (int z = 0; z < zSize; z++) {
-            // Iterate over the squares on the X-axis
-            for (int x = 0; x < xSize; x++) {
-                // Store coordinates for the corners; first triangle
-                triangles[tris + 0] = vert + 0;
-                triangles[tris + 1] = vert + xSize + 1;
-                triangles[tris + 2] = vert + 1;
-                // Store coordinates for the corners; second triangle
-                triangles[tris + 3] = vert + 1;
-                triangles[tris + 4] = vert + xSize + 1;
-                triangles[tris + 5] = vert + xSize + 2;
-                // Count a vertex and a triangle
-                vert++;
-                tris += 6;
-            }
-            // Count an extra vertex at the end of each row
-            vert++;
-        }        
+        return draft;
     }
 
-    // Function to update mesh with the new shape
-    void UpdateMesh () {
-        // Clear mesh from previous data
-        mesh.Clear();
-        // Input vertices array
-        mesh.vertices = vertices;
-        // Input triangles array
-        mesh.triangles = triangles;
-        // Recalculate normals for proper lighting
-        mesh.RecalculateNormals();
+    private static float GetHeight(int x, int z, int xSegments, int zSegments, Vector2 noiseOffset, FastNoise noise)
+    {
+        float noiseX = x/(float) xSegments + noiseOffset.x;
+        float noiseZ = z/(float) zSegments + noiseOffset.y;
+        return noise.GetNoise01(noiseX, noiseZ);
     }
-
 }
