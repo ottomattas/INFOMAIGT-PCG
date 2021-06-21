@@ -8,6 +8,7 @@ public class Coastline : MonoBehaviour
     Mesh mesh;
     public Vector3[] vertices;
     public List<Vector3> allPossibleVertices;
+    public List<Vector3> tempvertices;
     int[] lines;
     public float islandHeight;
     public float centerX;
@@ -43,16 +44,7 @@ public class Coastline : MonoBehaviour
             }
         }
         mesh = new Mesh();
-        GenerateCoastline();
-        GenerateMesh();
-        GetComponent<MeshFilter>().mesh = mesh;
-    }
-
-    void GenerateCoastline()
-    {
-        //TODO: 
-        //
-        List<Vector3> tempvertices = new List<Vector3>();
+        tempvertices = new List<Vector3>();
         for (int i = 0; i < allPossibleVertices.Count; i++)
         {
             if (allPossibleVertices[i].x >= minX && allPossibleVertices[i].x <= maxX &&
@@ -61,17 +53,63 @@ public class Coastline : MonoBehaviour
                 tempvertices.Add(allPossibleVertices[i]);
             }
         }
+        Vector3 FirstParent = GenerateSeed(tempvertices);
+        GenerateCoastline();
+        vertices = tempvertices.ToArray();
+        GenerateMesh();
+        GetComponent<MeshFilter>().mesh = mesh;
+    }
+
+    void GenerateCoastline()
+    {
+        int tokens = 100;
+        while (tokens >= 0)
+        {
+            Vector3 LocationToExpand = GenerateSeed(tempvertices);
+            Vector3 attractor = new Vector3(Random.Range(minX,maxX), islandHeight, Random.Range(minZ, maxZ));
+            while (true)
+            {
+                Vector3 temprepulsor = new Vector3(Random.Range(minX, maxX), islandHeight, Random.Range(minZ, maxZ));
+                if (Vector3.Angle(attractor, temprepulsor) >= 15.0f)
+                {
+                    this.repulsor = temprepulsor;
+                    break;
+                }
+            }
+            Vector3[] AdjacentPoints = new Vector3[]{
+                new Vector3(LocationToExpand.x - 1, islandHeight, LocationToExpand.z),
+                new Vector3(LocationToExpand.x + 1, islandHeight, LocationToExpand.z),
+                new Vector3(LocationToExpand.x, islandHeight, LocationToExpand.z - 1),
+                new Vector3(LocationToExpand.x, islandHeight, LocationToExpand.z + 1)
+            };
+            float score = 0;
+            Vector3 BestPoint = null;
+            foreach (Vector3 i in AdjacentPoints)
+            {
+                float tempscore = ScoreFunction(i);
+                if (tempscore > score)
+                {
+                    score = tempscore;
+                    BestPoint = i;
+                }
+            }
+            tempvertices.Add(BestPoint);
+
+
+        }   
+    }
+
+    public Vector3 GenerateSeed(List<Vector3> verticesList)
+    {
         while (true)
         {
-            int index = Random.Range(0, tempvertices.Count);
-            Vector3 Random_Selected = tempvertices[index];
-            //If the array is on the border, we can continue
-            if (isBorder(Random_Selected, tempvertices))
+            int index = Random.Range(0, verticesList.Count);
+            Vector3 Random_Selected = verticesList[index];
+            if (isBorder(Random_Selected, verticesList))
             {
-                break;
+                return Random_Selected;
             }
         }
-        vertices = tempvertices.ToArray();
     }
 
     void GenerateMesh()
@@ -83,10 +121,10 @@ public class Coastline : MonoBehaviour
     private bool isBorder(Vector3 LocationToCheck, List<Vector3> vertices)
     {
         Vector3[] tempLocations = new Vector3[]{
-            new Vector3(LocationToCheck.x - 1, islandHeight, LocationToCheck.z);
-            new Vector3(LocationToCheck.x + 1, islandHeight, LocationToCheck.z);
-            new Vector3(LocationToCheck.x, islandHeight, LocationToCHeck.z - 1);
-            new Vector3(LocationToCheck.x, islandheight, LocationToCheck.z + 1);
+            new Vector3(LocationToCheck.x - 1, islandHeight, LocationToCheck.z),
+            new Vector3(LocationToCheck.x + 1, islandHeight, LocationToCheck.z),
+            new Vector3(LocationToCheck.x, islandHeight, LocationToCHeck.z - 1),
+            new Vector3(LocationToCheck.x, islandheight, LocationToCheck.z + 1)
         };
         foreach (Vector3 elem in tempLocactions)
         {
@@ -100,6 +138,11 @@ public class Coastline : MonoBehaviour
             }
         }
         return false;
+    }
+
+    public float ScoreFunction(Vector3 EvaluationPoint Vector3 attractor, Vector3 repulsor)
+    {
+        return Vector3.Distance(repulsor, EvaluationPoint) - Vector3.Distance(attractor, EvaluationPoint);
     }
 
     void OnDrawGizmosSelected()
@@ -116,35 +159,4 @@ public class Coastline : MonoBehaviour
     {
         
     }*/
-}
-
-class CoastAgent
-{
-    Vector3 seed;
-    Vector3 direction;
-    public int tokens;
-    Vector3 attractor;
-    Vector3 repulsor;
-    public CoastAgent(Vector3 seed, int tokens, float xSize, float minX, float islandHeight, float zSize, float minZ)
-    {
-        this.seed = seed;
-        this.direction = Random.insideUnitCircle;
-        this.tokens = tokens;
-        this.attractor = new Vector3(Random.Range(minX,maxX), islandHeight, Random.Range(minZ, maxZ));
-        while (true)
-        {
-            Vector3 temprepulsor = new Vector3(Random.Range(minX, maxX), islandHeight, Random.Range(minZ, maxZ));
-            if (Vector3.Angle(attractor, temprepulsor) >= 15.0f)
-            {
-                this.repulsor = temprepulsor;
-                break;
-            }
-        }
-
-    }
-    
-    public float score(Vector3 EvaluationPoint)
-    {
-        return Vector3.Distance(repulsor, EvaluationPoint) - Vector3.Distance(attractor, EvaluationPoint);
-    }
 }
