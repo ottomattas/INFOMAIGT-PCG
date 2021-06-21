@@ -14,36 +14,36 @@ using Random = UnityEngine.Random;
 // }
 
 /// <summary>
-/// A simple low poly terrain generator based on fractal noise
+/// A simple low poly ground generator based on fractal noise
 /// </summary>
 public static class GroundGenerator
 {
     [Serializable]
     public class Config
     {
-        public Vector3 terrainSize = new Vector3(32, 5, 32);
+        public Vector3 groundSize = new Vector3(32, 5, 32);
         public float cellSize = 0.5f;
         public float noiseFrequency = 4;
         public Gradient gradient = ColorE.Gradient(Color.black, Color.white);
     }
 
-    public static MeshDraft TerrainDraft(Config config)
+    public static MeshDraft GroundDraft(Config config)
     {
-        Assert.IsTrue(config.terrainSize.x > 0);
-        Assert.IsTrue(config.terrainSize.z > 0);
+        Assert.IsTrue(config.groundSize.x > 0);
+        Assert.IsTrue(config.groundSize.z > 0);
         Assert.IsTrue(config.cellSize > 0);
 
         var noiseOffset = new Vector2(Random.Range(0f, 100f), Random.Range(0f, 100f));
 
-        int xSegments = Mathf.FloorToInt(config.terrainSize.x/config.cellSize);
-        int zSegments = Mathf.FloorToInt(config.terrainSize.z/config.cellSize);
+        int xSegments = Mathf.FloorToInt(config.groundSize.x/config.cellSize);
+        int zSegments = Mathf.FloorToInt(config.groundSize.z/config.cellSize);
 
-        float xStep = config.terrainSize.x/xSegments;
-        float zStep = config.terrainSize.z/zSegments;
+        float xStep = config.groundSize.x/xSegments;
+        float zStep = config.groundSize.z/zSegments;
         int vertexCount = 6*xSegments*zSegments;
         var draft = new MeshDraft
         {
-            name = "Terrain",
+            name = "Ground",
             vertices = new List<Vector3>(vertexCount),
             triangles = new List<int>(vertexCount),
             normals = new List<Vector3>(vertexCount),
@@ -78,10 +78,10 @@ public static class GroundGenerator
                 float height10 = GetHeight(x + 1, z + 0, xSegments, zSegments, noiseOffset, noise);
                 float height11 = GetHeight(x + 1, z + 1, xSegments, zSegments, noiseOffset, noise);
 
-                var vertex00 = new Vector3((x + 0)*xStep, height00*config.terrainSize.y, (z + 0)*zStep);
-                var vertex01 = new Vector3((x + 0)*xStep, height01*config.terrainSize.y, (z + 1)*zStep);
-                var vertex10 = new Vector3((x + 1)*xStep, height10*config.terrainSize.y, (z + 0)*zStep);
-                var vertex11 = new Vector3((x + 1)*xStep, height11*config.terrainSize.y, (z + 1)*zStep);
+                var vertex00 = new Vector3((x + 0)*xStep, height00*config.groundSize.y, (z + 0)*zStep);
+                var vertex01 = new Vector3((x + 0)*xStep, height01*config.groundSize.y, (z + 1)*zStep);
+                var vertex10 = new Vector3((x + 1)*xStep, height10*config.groundSize.y, (z + 0)*zStep);
+                var vertex11 = new Vector3((x + 1)*xStep, height11*config.groundSize.y, (z + 1)*zStep);
 
                 draft.vertices[index0] = vertex00;
                 draft.vertices[index1] = vertex01;

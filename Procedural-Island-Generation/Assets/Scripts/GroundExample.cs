@@ -1,13 +1,12 @@
-using ProceduralToolkit.Samples.UI;
 using UnityEngine;
 
 /// <summary>
 /// Configurator for GroundGenerator with UI and editor controls
 /// </summary>
-public class GroundExample : MonoBehaviour
+public class GroundExample : ConfiguratorBase
 {
-    public MeshFilter terrainMeshFilter;
-    public MeshCollider terrainMeshCollider;
+    public MeshFilter groundMeshFilter;
+    public MeshCollider groundMeshCollider;
     public RectTransform leftPanel;
     public bool constantSeed = false;
     public GroundGenerator.Config config = new GroundGenerator.Config();
@@ -19,7 +18,7 @@ public class GroundExample : MonoBehaviour
     private const int minNoiseFrequency = 1;
     private const int maxNoiseFrequency = 8;
 
-    private Mesh terrainMesh;
+    private Mesh groundMesh;
 
     private void Awake()
     {
@@ -27,9 +26,9 @@ public class GroundExample : MonoBehaviour
         SetupSkyboxAndPalette();
 
         InstantiateControl<SliderControl>(leftPanel)
-            .Initialize("Terrain height", minYSize, maxYSize, (int) config.terrainSize.y, value =>
+        .Initialize("Ground height", minYSize, maxYSize, (int) config.groundSize.y, value =>
             {
-                config.terrainSize.y = value;
+                config.groundSize.y = value;
                 Generate();
             });
 
@@ -69,9 +68,9 @@ public class GroundExample : MonoBehaviour
             config.gradient = ColorE.Gradient(from: GetMainColorHSV(), to: GetSecondaryColorHSV());
         }
 
-        var draft = GroundGenerator.TerrainDraft(config);
-        draft.Move(Vector3.left*config.terrainSize.x/2 + Vector3.back*config.terrainSize.z/2);
-        AssignDraftToMeshFilter(draft, terrainMeshFilter, ref terrainMesh);
-        terrainMeshCollider.sharedMesh = terrainMesh;
+        var draft = GroundGenerator.GroundDraft(config);
+        draft.Move(Vector3.left*config.groundSize.x/2 + Vector3.back*config.groundSize.z/2);
+        AssignDraftToMeshFilter(draft, groundMeshFilter, ref groundMesh);
+        groundMeshCollider.sharedMesh = groundMesh;
     }
 }
