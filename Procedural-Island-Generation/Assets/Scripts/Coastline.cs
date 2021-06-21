@@ -63,29 +63,14 @@ public class Coastline : MonoBehaviour
         }
         while (true)
         {
-            break;
             int index = Random.Range(0, tempvertices.Count);
             Vector3 Random_Selected = tempvertices[index];
-            //Check if it is on an edge, how do we do this?
-            //An edge has no value either on x - 1, x + 1, z - 1 or z + 1
-            if (Random_Selected.x == minX || Random_Selected.x == maxX || Random_Selected.z == minZ || Random_Selected.z == maxZ)
+            //If the array is on the border, we can continue
+            if (isBorder(Random_Selected, tempvertices))
             {
-                //It is on the border, select next 
                 break;
             }
         }
-        
-        int count = 20;
-        //How many vertices to place on the coastline
-        //int token = 100;
-        //Generate a first point
-        int counter = 0;
-        /*while (counter < count)
-        {
-            vertices[counter] = new Vector3(Random.Range(minX, maxX), islandHeight, Random.Range(minZ, maxZ));
-            counter++;
-
-        }*/
         vertices = tempvertices.ToArray();
     }
 
@@ -93,6 +78,28 @@ public class Coastline : MonoBehaviour
     {
         mesh.Clear();
         mesh.vertices = vertices;
+    }
+
+    private bool isBorder(Vector3 LocationToCheck, List<Vector3> vertices)
+    {
+        Vector3[] tempLocations = new Vector3[]{
+            new Vector3(LocationToCheck.x - 1, islandHeight, LocationToCheck.z);
+            new Vector3(LocationToCheck.x + 1, islandHeight, LocationToCheck.z);
+            new Vector3(LocationToCheck.x, islandHeight, LocationToCHeck.z - 1);
+            new Vector3(LocationToCheck.x, islandheight, LocationToCheck.z + 1);
+        };
+        foreach (Vector3 elem in tempLocactions)
+        {
+            if (!allPossibleVertices.Contains(elem))
+            {
+                return false;
+            }
+            if (!vertices.Contains(elem))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     void OnDrawGizmosSelected()
@@ -118,7 +125,7 @@ class CoastAgent
     public int tokens;
     Vector3 attractor;
     Vector3 repulsor;
-    public CoastAgent(Vector3 seed, int tokens, float minX, float maxX, float minZ, float maxZ, float islandHeight)
+    public CoastAgent(Vector3 seed, int tokens, float xSize, float minX, float islandHeight, float zSize, float minZ)
     {
         this.seed = seed;
         this.direction = Random.insideUnitCircle;
