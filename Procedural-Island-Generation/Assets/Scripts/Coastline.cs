@@ -24,6 +24,11 @@ public class Coastline : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //TODO: WE WANT 3 LISTS/ARRAYS; ALL POSSIBLE VERTICES (THIS IS THE ALLPOSSIBLEVERTICES),
+        //LIST OF ALL VERTICES OF THE ISLAND (THIS IS VERTICES) AND THE VERTICES OF THE COAST.
+        //VERTICES OF THE COAST WILL GET CHOSEN FROM, THEN NON-ISLAND THINGS GET ADDED TO THE ADJACENT
+        //VERTICES ARRAY, GET HIGHEST SCORE FROM ALL OF THE ADJACENT VERTICES ARRAY, ADD THAT ONE TO THE
+        //COAST LIST AND REMOVE THE 'CURRENT COAST VECTOR3 FROM SAID VECTOR3 ARRAY'
         GameObject ocean = GameObject.Find("Ocean");
         islandHeight = ocean.transform.position.y + 0.01f;
         centerX = 0;
@@ -62,12 +67,12 @@ public class Coastline : MonoBehaviour
     void GenerateCoastline()
     {
         int tokens = 100;
-        while (tokens >= 0)
+        for (int t = 0; t < tokens; t++)
         {
             Vector3 LocationToExpand = GenerateSeed(tempvertices);
-            Vector3 attractor = new Vector3(Random.Range(minX,maxX), islandHeight, Random.Range(minZ, maxZ));
-            Vector3 repulsor;
-            while (true)
+            //Vector3 attractor = new Vector3(Random.Range(minX,maxX), islandHeight, Random.Range(minZ, maxZ));
+            //Vector3 repulsor = new Vector3(Random.Range(minX, maxX), islandHeight, Random.Range(minZ, maxZ));
+            /*while (true)
             {
                 Vector3 temprepulsor = new Vector3(Random.Range(minX, maxX), islandHeight, Random.Range(minZ, maxZ));
                 if (Vector3.Angle(attractor, temprepulsor) >= 15.0f)
@@ -75,16 +80,16 @@ public class Coastline : MonoBehaviour
                     repulsor = temprepulsor;
                     break;
                 }
-            }
-            Vector3[] AdjacentPoints = new Vector3[]{
+            }*/
+            /*Vector3[] AdjacentPoints = new Vector3[]{
                 new Vector3(LocationToExpand.x - 1, islandHeight, LocationToExpand.z),
                 new Vector3(LocationToExpand.x + 1, islandHeight, LocationToExpand.z),
                 new Vector3(LocationToExpand.x, islandHeight, LocationToExpand.z - 1),
                 new Vector3(LocationToExpand.x, islandHeight, LocationToExpand.z + 1)
-            };
-            float score = 0;
-            Vector3 BestPoint = Vector3.zero;
-            foreach (Vector3 i in AdjacentPoints)
+            };*/
+            //float score = 0;
+            //Vector3 BestPoint = Vector3.zero;
+            /*foreach (Vector3 i in AdjacentPoints)
             {
                 float tempscore = ScoreFunction(i, attractor, repulsor);
                 if (tempscore > score)
@@ -92,20 +97,23 @@ public class Coastline : MonoBehaviour
                     score = tempscore;
                     BestPoint = i;
                 }
-            }
-            tempvertices.Add(BestPoint);
-            tokens--;
+            }*/
+            //tempvertices.Add(BestPoint);
         }   
     }
 
     public Vector3 GenerateSeed(List<Vector3> verticesList)
     {
-        while (true)
+        int i = 0;
+        while(true)
         {
             int index = Random.Range(0, verticesList.Count);
             Vector3 Random_Selected = verticesList[index];
+            Debug.Log(i);
+            i++;
             if (isBorder(Random_Selected, verticesList))
             {
+                Debug.Log("True");
                 return Random_Selected;
             }
         }
