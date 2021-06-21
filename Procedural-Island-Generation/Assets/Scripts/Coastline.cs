@@ -38,7 +38,7 @@ public class Coastline : MonoBehaviour
         maxZSize = 50;
         for (float i = centerX - maxXSize / 2; i < centerX + maxXSize / 2; i++)
         {
-            for (float j = centerZ - maxZSize / 2; j < centerZ + maxZSize; j++)
+            for (float j = centerZ - maxZSize / 2; j < centerZ + maxZSize / 2; j++)
             {
                 allPossibleVertices.Add(new Vector3(i, islandHeight, j));
             }
@@ -53,7 +53,6 @@ public class Coastline : MonoBehaviour
                 tempvertices.Add(allPossibleVertices[i]);
             }
         }
-        Vector3 FirstParent = GenerateSeed(tempvertices);
         GenerateCoastline();
         vertices = tempvertices.ToArray();
         GenerateMesh();
@@ -67,12 +66,13 @@ public class Coastline : MonoBehaviour
         {
             Vector3 LocationToExpand = GenerateSeed(tempvertices);
             Vector3 attractor = new Vector3(Random.Range(minX,maxX), islandHeight, Random.Range(minZ, maxZ));
+            Vector3 repulsor;
             while (true)
             {
                 Vector3 temprepulsor = new Vector3(Random.Range(minX, maxX), islandHeight, Random.Range(minZ, maxZ));
                 if (Vector3.Angle(attractor, temprepulsor) >= 15.0f)
                 {
-                    this.repulsor = temprepulsor;
+                    repulsor = temprepulsor;
                     break;
                 }
             }
@@ -83,10 +83,10 @@ public class Coastline : MonoBehaviour
                 new Vector3(LocationToExpand.x, islandHeight, LocationToExpand.z + 1)
             };
             float score = 0;
-            Vector3 BestPoint = null;
+            Vector3 BestPoint = Vector3.zero;
             foreach (Vector3 i in AdjacentPoints)
             {
-                float tempscore = ScoreFunction(i);
+                float tempscore = ScoreFunction(i, attractor, repulsor);
                 if (tempscore > score)
                 {
                     score = tempscore;
@@ -94,8 +94,7 @@ public class Coastline : MonoBehaviour
                 }
             }
             tempvertices.Add(BestPoint);
-
-
+            tokens--;
         }   
     }
 
@@ -123,10 +122,10 @@ public class Coastline : MonoBehaviour
         Vector3[] tempLocations = new Vector3[]{
             new Vector3(LocationToCheck.x - 1, islandHeight, LocationToCheck.z),
             new Vector3(LocationToCheck.x + 1, islandHeight, LocationToCheck.z),
-            new Vector3(LocationToCheck.x, islandHeight, LocationToCHeck.z - 1),
-            new Vector3(LocationToCheck.x, islandheight, LocationToCheck.z + 1)
+            new Vector3(LocationToCheck.x, islandHeight, LocationToCheck.z - 1),
+            new Vector3(LocationToCheck.x, islandHeight, LocationToCheck.z + 1)
         };
-        foreach (Vector3 elem in tempLocactions)
+        foreach (Vector3 elem in vertices)
         {
             if (!allPossibleVertices.Contains(elem))
             {
@@ -140,7 +139,7 @@ public class Coastline : MonoBehaviour
         return false;
     }
 
-    public float ScoreFunction(Vector3 EvaluationPoint Vector3 attractor, Vector3 repulsor)
+    public float ScoreFunction(Vector3 EvaluationPoint, Vector3 attractor, Vector3 repulsor)
     {
         return Vector3.Distance(repulsor, EvaluationPoint) - Vector3.Distance(attractor, EvaluationPoint);
     }
