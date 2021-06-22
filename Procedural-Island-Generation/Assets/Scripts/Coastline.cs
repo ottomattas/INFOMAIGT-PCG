@@ -9,16 +9,9 @@ public class Coastline : MonoBehaviour
     public Vector3[] vertices;
     public List<Vector3> allPossibleVertices;
     public List<Vector3> tempvertices;
-    int[] lines;
     public float islandHeight;
     public float centerX;
     public float centerZ;
-    public float xSize;
-    public float zSize;
-    public float minX;
-    public float maxX;
-    public float minZ;
-    public float maxZ;
     public float maxXSize;
     public float maxZSize;
     // Start is called before the first frame update
@@ -33,12 +26,6 @@ public class Coastline : MonoBehaviour
         islandHeight = ocean.transform.position.y + 0.01f;
         centerX = 0;
         centerZ = 0;
-        xSize = 10;
-        zSize = 10;
-        minX = centerX - xSize / 2;
-        maxX = centerX + xSize / 2;
-        minZ = centerZ - zSize / 2;
-        maxZ = centerZ + zSize / 2;
         maxXSize = 50;
         maxZSize = 50;
         for (float i = centerX - maxXSize / 2; i < centerX + maxXSize / 2; i++)
@@ -50,26 +37,25 @@ public class Coastline : MonoBehaviour
         }
         mesh = new Mesh();
         tempvertices = new List<Vector3>();
-        for (int i = 0; i < allPossibleVertices.Count; i++)
-        {
-            if (allPossibleVertices[i].x >= minX && allPossibleVertices[i].x <= maxX &&
-            allPossibleVertices[i].z >= minZ && allPossibleVertices[i].z <= maxZ)
-            {
-                tempvertices.Add(allPossibleVertices[i]);
-            }
-        }
-        GenerateCoastline();
+        Vector3 centerpoint = new Vector3(centerX, islandHeight, centerZ);
+        tempvertices.Add(centerpoint);
+        List<Vector3> borderlist = new List<Vector3>();
+        borderlist.Add(centerpoint);
+        GenerateCoastline(borderlist);
         vertices = tempvertices.ToArray();
         GenerateMesh();
         GetComponent<MeshFilter>().mesh = mesh;
     }
 
-    void GenerateCoastline()
+    void GenerateCoastline(List<Vector3> BorderList)
     {
-        int tokens = 100;
+        //First iteration LocationToExpand is the centerpoint
+        int tokens = 1000;
         for (int t = 0; t < tokens; t++)
         {
-            Vector3 LocationToExpand = GenerateSeed(tempvertices);
+            Vector3 LocationToExpand = GenerateSeed(BorderList);
+            Vector3 attractor = new Vector3(Random.Range(centerX - maxXSize/2, centerX + maxXSize/2), islandHeight,
+                Random.Range(centerZ - maxZSize/2, centerZ + maxZSize/2));
             //Vector3 attractor = new Vector3(Random.Range(minX,maxX), islandHeight, Random.Range(minZ, maxZ));
             //Vector3 repulsor = new Vector3(Random.Range(minX, maxX), islandHeight, Random.Range(minZ, maxZ));
             /*while (true)
@@ -104,19 +90,9 @@ public class Coastline : MonoBehaviour
 
     public Vector3 GenerateSeed(List<Vector3> verticesList)
     {
-        int i = 0;
-        while(true)
-        {
-            int index = Random.Range(0, verticesList.Count);
-            Vector3 Random_Selected = verticesList[index];
-            Debug.Log(i);
-            i++;
-            if (isBorder(Random_Selected, verticesList))
-            {
-                Debug.Log("True");
-                return Random_Selected;
-            }
-        }
+        int index = Random.Range(0, verticesList.Count);
+        Vector3 Random_Selected = verticesList[index];
+        return Random_Selected;
     }
 
     void GenerateMesh()
