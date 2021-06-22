@@ -56,26 +56,26 @@ public class Coastline : MonoBehaviour
             Vector3 LocationToExpand = GenerateSeed(BorderList);
             Vector3 attractor = new Vector3(Random.Range(centerX - maxXSize/2, centerX + maxXSize/2), islandHeight,
                 Random.Range(centerZ - maxZSize/2, centerZ + maxZSize/2));
-            //Vector3 attractor = new Vector3(Random.Range(minX,maxX), islandHeight, Random.Range(minZ, maxZ));
-            //Vector3 repulsor = new Vector3(Random.Range(minX, maxX), islandHeight, Random.Range(minZ, maxZ));
-            /*while (true)
+            Vector3 repulsor;
+            while (true)
             {
-                Vector3 temprepulsor = new Vector3(Random.Range(minX, maxX), islandHeight, Random.Range(minZ, maxZ));
+                Vector3 temprepulsor = new Vector3(Random.Range(centerX - maxXSize / 2, centerX+ maxXSize / 2), 
+                    islandHeight, Random.Range(centerZ - maxZSize / 2, centerZ + maxZSize / 2));
                 if (Vector3.Angle(attractor, temprepulsor) >= 15.0f)
                 {
                     repulsor = temprepulsor;
                     break;
                 }
-            }*/
-            /*Vector3[] AdjacentPoints = new Vector3[]{
+            }
+            Vector3[] AdjacentPoints = new Vector3[]{
                 new Vector3(LocationToExpand.x - 1, islandHeight, LocationToExpand.z),
                 new Vector3(LocationToExpand.x + 1, islandHeight, LocationToExpand.z),
                 new Vector3(LocationToExpand.x, islandHeight, LocationToExpand.z - 1),
                 new Vector3(LocationToExpand.x, islandHeight, LocationToExpand.z + 1)
-            };*/
-            //float score = 0;
-            //Vector3 BestPoint = Vector3.zero;
-            /*foreach (Vector3 i in AdjacentPoints)
+            };
+            float score = float.MinValue;
+            Vector3 BestPoint = Vector3.zero;
+            foreach (Vector3 i in AdjacentPoints)
             {
                 float tempscore = ScoreFunction(i, attractor, repulsor);
                 if (tempscore > score)
@@ -83,8 +83,10 @@ public class Coastline : MonoBehaviour
                     score = tempscore;
                     BestPoint = i;
                 }
-            }*/
-            //tempvertices.Add(BestPoint);
+            }
+            BorderList.Remove(LocationToExpand);
+            BorderList.Add(BestPoint);
+            tempvertices.Add(BestPoint);
         }   
     }
 
