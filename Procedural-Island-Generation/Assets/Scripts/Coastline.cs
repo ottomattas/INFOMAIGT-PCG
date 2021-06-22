@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(MeshFilter))]
@@ -50,7 +51,7 @@ public class Coastline : MonoBehaviour
     void GenerateCoastline(List<Vector3> BorderList)
     {
         //First iteration LocationToExpand is the centerpoint
-        int tokens = 1000;
+        int tokens = 1250;
         for (int t = 0; t < tokens; t++)
         {
             Vector3 LocationToExpand = GenerateSeed(BorderList);
@@ -84,7 +85,10 @@ public class Coastline : MonoBehaviour
                     BestPoint = i;
                 }
             }
-            BorderList.Remove(LocationToExpand);
+            if (!isBorder(LocationToExpand, tempvertices))
+            {
+                BorderList.Remove(LocationToExpand);
+            }
             BorderList.Add(BestPoint);
             tempvertices.Add(BestPoint);
         }   
@@ -113,11 +117,11 @@ public class Coastline : MonoBehaviour
         };
         foreach (Vector3 elem in vertices)
         {
-            if (!allPossibleVertices.Contains(elem))
+            if (!allPossibleVertices.Any(vector => elem.x == vector.x && elem.z == vector.z))
             {
                 return false;
             }
-            if (!vertices.Contains(elem))
+            if (!vertices.Any(vector => elem.x == vector.x && elem.z == vector.z))
             {
                 return true;
             }
