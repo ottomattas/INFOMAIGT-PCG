@@ -10,6 +10,7 @@ public class Coastline : MonoBehaviour
     public Vector3[] vertices;
     public List<Vector3> allPossibleVertices;
     public List<Vector3> tempvertices;
+    public List<Vector3> borderlist;
     public float islandHeight;
     public float centerX;
     public float centerZ;
@@ -40,7 +41,7 @@ public class Coastline : MonoBehaviour
         tempvertices = new List<Vector3>();
         Vector3 centerpoint = new Vector3(centerX, islandHeight, centerZ);
         tempvertices.Add(centerpoint);
-        List<Vector3> borderlist = new List<Vector3>();
+        borderlist = new List<Vector3>();
         borderlist.Add(centerpoint);
         GenerateCoastline(borderlist);
         vertices = tempvertices.ToArray();
