@@ -1,10 +1,6 @@
 {
-    "name": "Ground",
-    "references": [
-        "Coastline",
-        "Runtime",
-		"Tools"
-    ],
+    "name": "Coastline",
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
