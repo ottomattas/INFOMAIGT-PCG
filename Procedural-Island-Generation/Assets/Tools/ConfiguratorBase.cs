@@ -20,33 +20,33 @@ namespace Tools
             return control;
         }
 
-        public static MeshDraft Platform(float radius, float height, int segments = 128)
-        {
-            float segmentAngle = 360f/segments;
-            float currentAngle = 0;
+        // public static MeshDraft Platform(float radius, float height, int segments = 128)
+        // {
+        //     float segmentAngle = 360f/segments;
+        //     float currentAngle = 0;
 
-            var lowerRing = new List<Vector3>(segments);
-            var upperRing = new List<Vector3>(segments);
-            for (var i = 0; i < segments; i++)
-            {
-                // lowerRing.Add(Geometry.PointOnCircle3XZ(radius + height, currentAngle) + Vector3.down*height);
-                // upperRing.Add(Geometry.PointOnCircle3XZ(radius, currentAngle));
-                currentAngle += segmentAngle;
-            }
+        //     var lowerRing = new List<Vector3>(segments);
+        //     var upperRing = new List<Vector3>(segments);
+        //     for (var i = 0; i < segments; i++)
+        //     {
+        //         // lowerRing.Add(Geometry.PointOnCircle3XZ(radius + height, currentAngle) + Vector3.down*height);
+        //         // upperRing.Add(Geometry.PointOnCircle3XZ(radius, currentAngle));
+        //         currentAngle += segmentAngle;
+        //     }
 
-            var platform = new MeshDraft {name = "Platform"}
-                .AddFlatQuadBand(lowerRing, upperRing, false);
+        //     // var platform = new MeshDraft {name = "Platform"}
+        //     //     .AddFlatQuadBand(lowerRing, upperRing, false);
 
-            lowerRing.Reverse();
-            platform.AddTriangleFan(lowerRing, Vector3.down)
-                .Paint(new Color(0.5f, 0.5f, 0.5f, 1));
+        //     // lowerRing.Reverse();
+        //     // platform.AddTriangleFan(lowerRing, Vector3.down)
+        //     //     .Paint(new Color(0.5f, 0.5f, 0.5f, 1));
 
-            platform.Add(new MeshDraft()
-                .AddTriangleFan(upperRing, Vector3.up)
-                .Paint(new Color(0.8f, 0.8f, 0.8f, 1)));
+        //     // platform.Add(new MeshDraft()
+        //     //     .AddTriangleFan(upperRing, Vector3.up)
+        //     //     .Paint(new Color(0.8f, 0.8f, 0.8f, 1)));
 
-            return platform;
-        }
+        //     // return platform;
+        // }
 
         public static void AssignDraftToMeshFilter(MeshDraft draft, MeshFilter meshFilter, ref Mesh mesh)
         {
