@@ -46,19 +46,21 @@ namespace Agents
             tempvertices.Add(centerpoint);
             borderlist = new List<Vector3>();
             borderlist.Add(centerpoint);
-            GenerateCoastline(borderlist);
+            Debug.Log(borderlist[0]);
+            GenerateCoastline();
+            Debug.Log(borderlist[0]);
             vertices = tempvertices.ToArray();
             GenerateMesh();
             GetComponent<MeshFilter>().mesh = mesh;
         }
 
-        void GenerateCoastline(List<Vector3> BorderList)
+        void GenerateCoastline()
         {
             //First iteration LocationToExpand is the centerpoint
             int tokens = 1250;
             for (int t = 0; t < tokens; t++)
             {
-                Vector3 LocationToExpand = GenerateSeed(BorderList);
+                Vector3 LocationToExpand = GenerateSeed(borderlist);
                 Vector3 attractor = new Vector3(Random.Range(centerX - maxXSize/2, centerX + maxXSize/2), islandHeight,
                     Random.Range(centerZ - maxZSize/2, centerZ + maxZSize/2));
                 Vector3 repulsor;
@@ -91,9 +93,9 @@ namespace Agents
                 }
                 if (!isBorder(LocationToExpand, tempvertices))
                 {
-                    BorderList.Remove(LocationToExpand);
+                    borderlist.Remove(LocationToExpand);
                 }
-                BorderList.Add(BestPoint);
+                borderlist.Add(BestPoint);
                 tempvertices.Add(BestPoint);
             }   
         }
