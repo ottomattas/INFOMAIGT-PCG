@@ -46,10 +46,8 @@ namespace Agents
             tempvertices.Add(centerpoint);
             borderlist = new List<Vector3>();
             borderlist.Add(centerpoint);
-            Debug.Log(borderlist[0]);
             GenerateCoastline();
-            Debug.Log(borderlist[0]);
-            vertices = tempvertices.ToArray();
+            vertices = tempvertices.OrderBy(item => item.x).ThenBy(item => item.z).ToArray();
             GenerateMesh();
             GetComponent<MeshFilter>().mesh = mesh;
         }

@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+namespace Agents{
 // Require a Mesh Filter on the same object as this script
 [RequireComponent(typeof(MeshFilter))]
 
@@ -10,6 +12,7 @@ public class TerrainGenerator : MonoBehaviour
 
     // Create an variable for an array of vertices with 3 points each
     Vector3[] vertices;
+    Vector3[] coastvertices;
 
     // Create a variable for an array of triangles 
     int [] triangles;
@@ -23,39 +26,39 @@ public class TerrainGenerator : MonoBehaviour
 
     // Use this for intialization
     void Start () {
+        GameObject Coast = GameObject.Find("Coastline");
+        Coastline coastline = Coast.GetComponent<Coastline>();
+        coastvertices = coastline.vertices;
+
         // Create a new mesh object
         mesh = new Mesh();
-        // Store the mesh object in the Mesh Filter
-        GetComponent<MeshFilter>().mesh = mesh;
+        
         // Create a new shape regular or through coroutine; choose one
         CreateShape();
+        UpdateMesh();
+        // Store the mesh object in the Mesh Filter
+        GetComponent<MeshFilter>().mesh = mesh;
         //StartCoroutine(CreateShape());
     }
 
-    void Update () {
+    /*void Update () {
         // Update mesh with the new shape
         UpdateMesh();
-    }
+    }*/
 
     // Function to create a new shape or through coroutine; choose one
     void CreateShape () {
     //IEnumerator CreateShape () {
         // Create a new array of vertices with the maximum size
-        vertices = new Vector3[(xSize + 1) * (zSize + 1)];
+        vertices = coastvertices;
         // Create an index for accessing a vertex
-        int i = 0;
 
         // Assign positions for each of the points of the vertices,
         // starting from bottom left to right by row
-        for (int z = 0; z <= zSize; z++) {
-            for (int x = 0; x <= xSize; x++) {
-                // Create a new variable for the height of the vertex
-                float y = Mathf.PerlinNoise(x * .3f, z * .3f) * 2f;
-                // Access each vertex and give a new array of position points
-                vertices[i] = new Vector3(x, y, z);
-                // Count a vertex
-                i++;
-            }
+        for (int i = 0; i < vertices.Length; i++)
+        {
+            float newy = Mathf.PerlinNoise(vertices[i].x * .3f, vertices[i].z* .3f) * 2f;
+            vertices[i][1] = newy;
         }
 
         // Create a new triangles array with the maximum size
@@ -113,4 +116,5 @@ public class TerrainGenerator : MonoBehaviour
         }
     }
 
+}
 }
