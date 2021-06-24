@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 
@@ -13,6 +14,7 @@ public class TerrainGenerator : MonoBehaviour
     // Create an variable for an array of vertices with 3 points each
     Vector3[] vertices;
     Vector3[] coastvertices;
+    Vector3[] allPossibleVertices;
 
     // Create a variable for an array of triangles 
     int [] triangles;
@@ -21,14 +23,15 @@ public class TerrainGenerator : MonoBehaviour
     Mesh mesh;
 
     // Define parameters for the grid size
-    public int xSize = 20;
-    public int zSize = 20;
+    public int xSize = 50;
+    public int zSize = 50;
 
     // Use this for intialization
     void Start () {
         GameObject Coast = GameObject.Find("Coastline");
         Coastline coastline = Coast.GetComponent<Coastline>();
         coastvertices = coastline.vertices;
+        allPossibleVertices = coastline.allPossibleVertices.ToArray();
 
         // Create a new mesh object
         mesh = new Mesh();
@@ -41,24 +44,27 @@ public class TerrainGenerator : MonoBehaviour
         //StartCoroutine(CreateShape());
     }
 
-    /*void Update () {
+    void Update () {
         // Update mesh with the new shape
         UpdateMesh();
-    }*/
+    }
 
     // Function to create a new shape or through coroutine; choose one
     void CreateShape () {
     //IEnumerator CreateShape () {
         // Create a new array of vertices with the maximum size
-        vertices = coastvertices;
+        vertices = allPossibleVertices;
         // Create an index for accessing a vertex
 
         // Assign positions for each of the points of the vertices,
         // starting from bottom left to right by row
         for (int i = 0; i < vertices.Length; i++)
         {
-            float newy = Mathf.PerlinNoise(vertices[i].x * .3f, vertices[i].z* .3f) * 2f;
-            vertices[i][1] = newy;
+            if (coastvertices.Any(elem => elem.x == vertices[i].x && elem.z == vertices[i].z))
+            {
+                float newy = Mathf.PerlinNoise(vertices[i].x * .3f, vertices[i].z* .3f) * 2f;
+                vertices[i].y = newy;
+            }
         }
 
         // Create a new triangles array with the maximum size
@@ -69,9 +75,9 @@ public class TerrainGenerator : MonoBehaviour
         int tris = 0;
 
         // Iterate over the squares on the Z-axis
-        for (int z = 0; z < zSize; z++) {
+        for (int z = 0; z < zSize - 1; z++) {
             // Iterate over the squares on the X-axis
-            for (int x = 0; x < xSize; x++) {
+            for (int x = 0; x < xSize - 1; x++) {
                 // Store coordinates for the corners; first triangle
                 triangles[tris + 0] = vert + 0;
                 triangles[tris + 1] = vert + xSize + 1;
@@ -87,8 +93,8 @@ public class TerrainGenerator : MonoBehaviour
                 //yield return new WaitForSeconds(.1f);
             }
             // Count an extra vertex at the end of each row
-            vert++;
-        }        
+            //vert++;
+        }
     }
 
     // Function to update mesh with the new shape
@@ -112,7 +118,7 @@ public class TerrainGenerator : MonoBehaviour
 
         // Draw a small sphere on each vertex
         for (int i = 0; i < vertices.Length; i++) {
-            Gizmos.DrawSphere(vertices[i], .01f);
+            Gizmos.DrawSphere(vertices[i], .1f);
         }
     }
 

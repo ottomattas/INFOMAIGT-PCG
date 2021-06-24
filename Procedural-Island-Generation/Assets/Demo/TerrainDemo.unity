@@ -178,6 +178,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ocean
       objectReference: {fileID: 0}
+    - target: {fileID: 2315220910225237894, guid: fdd4dedc5896544a9a6b485dd4e76bdd, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fdd4dedc5896544a9a6b485dd4e76bdd, type: 3}
 --- !u!1 &1510248317
@@ -471,6 +475,14 @@ PrefabInstance:
     - target: {fileID: 5502354555073848891, guid: 550779ee9e5a64e14be9e48564de01ae, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5502354555073848892, guid: 550779ee9e5a64e14be9e48564de01ae, type: 3}
+      propertyPath: xSize
+      value: 49
+      objectReference: {fileID: 0}
+    - target: {fileID: 5502354555073848892, guid: 550779ee9e5a64e14be9e48564de01ae, type: 3}
+      propertyPath: zSize
+      value: 49
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 550779ee9e5a64e14be9e48564de01ae, type: 3}

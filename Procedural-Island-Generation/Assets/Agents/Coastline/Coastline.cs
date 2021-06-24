@@ -33,11 +33,11 @@ namespace Agents
             centerZ = 0;
             maxXSize = 50;
             maxZSize = 50;
-            for (float i = centerX - maxXSize / 2; i < centerX + maxXSize / 2; i++)
+            for (float i = centerZ - maxZSize / 2; i < centerZ + maxZSize / 2; i++)
             {
-                for (float j = centerZ - maxZSize / 2; j < centerZ + maxZSize / 2; j++)
+                for (float j = centerX - maxXSize / 2; j < centerX + maxXSize / 2; j++)
                 {
-                    allPossibleVertices.Add(new Vector3(i, islandHeight, j));
+                    allPossibleVertices.Add(new Vector3(i, -1, j));
                 }
             }
             mesh = new Mesh();
