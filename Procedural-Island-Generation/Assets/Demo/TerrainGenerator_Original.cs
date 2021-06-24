@@ -5,7 +5,7 @@ using UnityEngine;
 // Require a Mesh Filter on the same object as this script
 [RequireComponent(typeof(MeshFilter))]
 
-public class TerrainGenerator : MonoBehaviour
+public class TerrainGenerator_Original : MonoBehaviour
 {   
 
     // Create an variable for an array of vertices with 3 points each
