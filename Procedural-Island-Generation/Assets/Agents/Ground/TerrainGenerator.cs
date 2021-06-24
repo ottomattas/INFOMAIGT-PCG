@@ -53,6 +53,7 @@ public class TerrainGenerator : MonoBehaviour
     void CreateShape () {
     //IEnumerator CreateShape () {
         // Create a new array of vertices with the maximum size
+        //vertices = new Vector3[(xSize + 1) * (zSize + 1)];
         vertices = allPossibleVertices;
         // Create an index for accessing a vertex
 
@@ -60,12 +61,26 @@ public class TerrainGenerator : MonoBehaviour
         // starting from bottom left to right by row
         for (int i = 0; i < vertices.Length; i++)
         {
-            if (coastvertices.Any(elem => elem.x == vertices[i].x && elem.z == vertices[i].z))
-            {
+            //if (coastvertices.Any(elem => elem.x == vertices[i].x && elem.z == vertices[i].z))
+            //{
                 float newy = Mathf.PerlinNoise(vertices[i].x * .3f, vertices[i].z* .3f) * 2f;
                 vertices[i].y = newy;
-            }
+            //}
         }
+        /*int i = 0;
+
+        // Assign positions for each of the points of the vertices,
+        // starting from bottom left to right by row
+        for (int z = 0; z <= zSize; z++) {
+            for (int x = 0; x <= xSize; x++) {
+                // Create a new variable for the height of the vertex
+                float y = Mathf.PerlinNoise(x * .3f, z * .3f) * 2f;
+                // Access each vertex and give a new array of position points
+                vertices[i] = new Vector3(x, y, z);
+                // Count a vertex
+                i++;
+            }
+        }*/
 
         // Create a new triangles array with the maximum size
         triangles = new int[xSize * zSize * 6];
@@ -75,9 +90,9 @@ public class TerrainGenerator : MonoBehaviour
         int tris = 0;
 
         // Iterate over the squares on the Z-axis
-        for (int z = 0; z < zSize - 1; z++) {
+        for (int z = 0; z < zSize; z++) {
             // Iterate over the squares on the X-axis
-            for (int x = 0; x < xSize - 1; x++) {
+            for (int x = 0; x < xSize; x++) {
                 // Store coordinates for the corners; first triangle
                 triangles[tris + 0] = vert + 0;
                 triangles[tris + 1] = vert + xSize + 1;
@@ -93,7 +108,7 @@ public class TerrainGenerator : MonoBehaviour
                 //yield return new WaitForSeconds(.1f);
             }
             // Count an extra vertex at the end of each row
-            //vert++;
+            vert++;
         }
     }
 
