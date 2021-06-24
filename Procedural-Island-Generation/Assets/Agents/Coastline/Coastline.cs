@@ -14,11 +14,11 @@ namespace Agents
         public List<Vector3> allPossibleVertices;
         public List<Vector3> tempvertices;
         public List<Vector3> borderlist;
-        public float islandHeight;
+        public float islandHeight = 0;
+        public float xSize = 100;
+        public float zSize = 100;
         public float centerX;
         public float centerZ;
-        public float xSize;
-        public float zSize;
         // Start is called before the first frame update
         void Start()
         {
@@ -29,11 +29,11 @@ namespace Agents
             //COAST LIST AND REMOVE THE 'CURRENT COAST VECTOR3 FROM SAID VECTOR3 ARRAY'
             GameObject ocean = GameObject.Find("Ocean");
             //islandHeight = ocean.transform.position.y + 0.01f;
-            islandHeight = 0;
-            xSize = 50;
-            zSize = 50;
-            centerX = 25;
-            centerZ = 25;
+            // islandHeight = 0;
+            // xSize = 50;
+            // zSize = 50;
+            // centerX = 25;
+            // centerZ = 25;
             /*for (float i = centerZ - zSize / 2; i < centerZ + zSize / 2 + 1; i++)
             {
                 for (float j = centerX - xSize / 2; j < centerX + xSize / 2 + 1; j++)
@@ -41,6 +41,8 @@ namespace Agents
                     allPossibleVertices.Add(new Vector3(i, -1, j));
                 }
             }*/
+            centerX = xSize/2;
+            centerZ = zSize/2;
 
             generateallpossiblevertices();
             
