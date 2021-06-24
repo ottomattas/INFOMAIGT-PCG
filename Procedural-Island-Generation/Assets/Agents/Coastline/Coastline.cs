@@ -14,7 +14,7 @@ namespace Agents
         public List<Vector3> allPossibleVertices;
         public List<Vector3> tempvertices;
         public List<Vector3> borderlist;
-        public float islandHeight = 0;
+        public float islandHeight;
         public float xSize = 100;
         public float zSize = 100;
         public float centerX;
@@ -27,26 +27,23 @@ namespace Agents
             //VERTICES OF THE COAST WILL GET CHOSEN FROM, THEN NON-ISLAND THINGS GET ADDED TO THE ADJACENT
             //VERTICES ARRAY, GET HIGHEST SCORE FROM ALL OF THE ADJACENT VERTICES ARRAY, ADD THAT ONE TO THE
             //COAST LIST AND REMOVE THE 'CURRENT COAST VECTOR3 FROM SAID VECTOR3 ARRAY'
+            
+            //Find the GameObject Ocean(which is just a simple blue plane), and save its y value as the height
+            //where to place the island
             GameObject ocean = GameObject.Find("Ocean");
-            //islandHeight = ocean.transform.position.y + 0.01f;
-            // islandHeight = 0;
-            // xSize = 50;
-            // zSize = 50;
-            // centerX = 25;
-            // centerZ = 25;
-            /*for (float i = centerZ - zSize / 2; i < centerZ + zSize / 2 + 1; i++)
-            {
-                for (float j = centerX - xSize / 2; j < centerX + xSize / 2 + 1; j++)
-                {
-                    allPossibleVertices.Add(new Vector3(i, -1, j));
-                }
-            }*/
+            islandHeight = ocean.transform.position.y + 0.01f;
             centerX = xSize/2;
             centerZ = zSize/2;
 
-            generateallpossiblevertices();
+            //Create the list allPossibleVertices
+            CreateAllVertices();
             
-            mesh = new Mesh();
+
+            //ALL THINGS RELATED TO MESHES IS COMMENTED OUT, IF STUFF DOES NOT WORK, TRY TO ADD IT IN FIRST
+            //BEFORE DOING ANYTHING ELSE, STUFF IS WORKING NOW (WITH MESH COMMENTED OUT), IF UNNECESSARY, WE
+            //SHOULD KEEP IT OUT TO SAVE SOME TIME
+            //Create a mesh
+            //mesh = new Mesh();
             tempvertices = new List<Vector3>();
             Vector3 centerpoint = new Vector3(centerX, islandHeight, centerZ);
             tempvertices.Add(centerpoint);
@@ -54,21 +51,18 @@ namespace Agents
             borderlist.Add(centerpoint);
             GenerateCoastline();
             vertices = tempvertices.OrderBy(item => item.x).ThenBy(item => item.z).ToArray();
-            //vertices = allPossibleVertices.ToArray();
-            GenerateMesh();
-            GetComponent<MeshFilter>().mesh = mesh;
+            //GenerateMesh();
+            //GetComponent<MeshFilter>().mesh = mesh;
         }
 
-        void generateallpossiblevertices()
+        void CreateAllVertices()
         {
-            int i = 0;
+            //This function adds every vector between Vector3(0,0,0) to Vector3(xSize,0,zSize)
+            //To the list allPossibleVertices. 
             for (int z = 0; z <= zSize; z++) {
                 for (int x = 0; x <= xSize; x++) {
-                // Create a new variable for the height of the vertex
-                // Access each vertex and give a new array of position points
+                    // Create a new Vector3 with height 0 and coordinates x and z
                     allPossibleVertices.Add(new Vector3(x, 0, z));
-                // Count a vertex
-                    i++;
                 }
             }
         }
@@ -116,7 +110,7 @@ namespace Agents
                 }
                 borderlist.Add(BestPoint);
                 tempvertices.Add(BestPoint);
-            }   
+            }
         }
 
         public Vector3 GenerateSeed(List<Vector3> verticesList)
@@ -126,26 +120,39 @@ namespace Agents
             return Random_Selected;
         }
 
-        void GenerateMesh()
+        /*void GenerateMesh()
         {
             mesh.Clear();
             mesh.vertices = vertices;
-        }
+        }*/
 
         private bool isBorder(Vector3 LocationToCheck, List<Vector3> vertices)
         {
-            Vector3[] tempLocations = new Vector3[]{
+            //isBorder takes 2 arguemnts, a Vector3 and a list of Vector3s.
+            //The Vector3 is the Vector for which it needs to be determined if it is on the edge of the island
+            //This is the case if in all 4 directions, there is at least one point for which it is the case that:
+            //it is part of allPossibleVertices and that the coordinates it not part of vertices
+            Vector3[] directions = new Vector3[]{
                 new Vector3(LocationToCheck.x - 1, islandHeight, LocationToCheck.z),
                 new Vector3(LocationToCheck.x + 1, islandHeight, LocationToCheck.z),
                 new Vector3(LocationToCheck.x, islandHeight, LocationToCheck.z - 1),
                 new Vector3(LocationToCheck.x, islandHeight, LocationToCheck.z + 1)
             };
-            foreach (Vector3 elem in vertices)
+
+            //4 Vectors are created. We first need to check if any of the vectors do not already exist in vertices
+            List<Vector3> tempLocations = new List<Vector3>();
+            
+            foreach (Vector3 direction in directions)
             {
-                if (!allPossibleVertices.Any(vector => elem.x == vector.x && elem.z == vector.z))
+                if(allPossibleVertices.Any(elem => elem.x == direction.x && elem.z == direction.z))
                 {
-                    return false;
+                    tempLocations.Add(direction);
                 }
+            }
+            foreach (Vector3 elem in tempLocations)
+            {
+                //We have to ensure that an element is part of allpossible vertices and that it is not
+                //part yet of the list of vertices
                 if (!vertices.Any(vector => elem.x == vector.x && elem.z == vector.z))
                 {
                     return true;
@@ -156,7 +163,23 @@ namespace Agents
 
         public float ScoreFunction(Vector3 EvaluationPoint, Vector3 attractor, Vector3 repulsor)
         {
-            return Vector3.Distance(repulsor, EvaluationPoint) - Vector3.Distance(attractor, EvaluationPoint);
+            float tempdistancescore = 0;
+            float[] distancetoalledges = new float[]{
+                Vector3.Distance(EvaluationPoint, new Vector3(EvaluationPoint.x, islandHeight, zSize)),
+                Vector3.Distance(EvaluationPoint, new Vector3(EvaluationPoint.x, islandHeight, 0)),
+                Vector3.Distance(EvaluationPoint, new Vector3(xSize, islandHeight, EvaluationPoint.z)),
+                Vector3.Distance(EvaluationPoint, new Vector3(0, islandHeight, EvaluationPoint.z))
+            };
+            foreach (float x in distancetoalledges)
+            {
+                if (x > tempdistancescore)
+                {
+                    tempdistancescore = x;
+                }
+            }
+            float distancescore = (float)System.Math.Pow(tempdistancescore, 2);
+            return Vector3.Distance(repulsor, EvaluationPoint) - Vector3.Distance(attractor, EvaluationPoint) 
+                + 3*distancescore;
         }
 
         void OnDrawGizmosSelected()
