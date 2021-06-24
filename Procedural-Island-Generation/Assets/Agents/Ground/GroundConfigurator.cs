@@ -14,7 +14,8 @@ namespace Agents
         public MeshCollider groundMeshCollider;
         public RectTransform leftPanel;
         public bool constantSeed = false;
-        public GroundGenerator.Config config = new GroundGenerator.Config();
+        // public GroundGenerator.Config config = new GroundGenerator.Config();
+        public GroundMaker.Config config = new GroundMaker.Config();
 
         private const int minYSize = 1;
         private const int maxYSize = 10;
@@ -73,7 +74,8 @@ namespace Agents
                 config.gradient = ColorE.Gradient(from: GetMainColorHSV(), to: GetSecondaryColorHSV());
             }
 
-            var draft = GroundGenerator.GroundDraft(config);
+            // var draft = GroundGenerator.GroundDraft(config);
+            var draft = GroundMaker.GroundDraft(config);
             draft.Move(Vector3.left*config.groundSize.x/2 + Vector3.back*config.groundSize.z/2);
             AssignDraftToMeshFilter(draft, groundMeshFilter, ref groundMesh);
             groundMeshCollider.sharedMesh = groundMesh;
