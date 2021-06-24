@@ -18,7 +18,7 @@ namespace Agents
             base.OnInspectorGUI();
 
             EditorGUILayout.Space();
-            if (GUILayout.Button("Generate mesh"))
+            if (GUILayout.Button("Generate Mesh"))
             {
                 Undo.RecordObjects(new Object[]
                 {
@@ -27,7 +27,7 @@ namespace Agents
                 }, "Generate Ground");
                 generator.Generate(randomizeConfig: false);
             }
-            if (GUILayout.Button("Randomize config and generate mesh"))
+            if (GUILayout.Button("Randomize Config and Generate Mesh"))
             {
                 Undo.RecordObjects(new Object[]
                 {
