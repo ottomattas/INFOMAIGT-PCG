@@ -33,9 +33,9 @@ namespace Agents
             centerZ = 0;
             maxXSize = 50;
             maxZSize = 50;
-            for (float i = centerZ - maxZSize / 2; i < centerZ + maxZSize / 2; i++)
+            for (float i = centerZ - maxZSize / 2; i < centerZ + maxZSize / 2 + 1; i++)
             {
-                for (float j = centerX - maxXSize / 2; j < centerX + maxXSize / 2; j++)
+                for (float j = centerX - maxXSize / 2; j < centerX + maxXSize / 2 + 1; j++)
                 {
                     allPossibleVertices.Add(new Vector3(i, -1, j));
                 }
