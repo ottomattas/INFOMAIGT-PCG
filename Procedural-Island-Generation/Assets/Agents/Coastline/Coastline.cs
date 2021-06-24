@@ -45,14 +45,14 @@ namespace Agents
             generateallpossiblevertices();
             
             mesh = new Mesh();
-            //tempvertices = new List<Vector3>();
+            tempvertices = new List<Vector3>();
             Vector3 centerpoint = new Vector3(centerX, islandHeight, centerZ);
-            //tempvertices.Add(centerpoint);
-            //borderlist = new List<Vector3>();
-            //borderlist.Add(centerpoint);
-            //GenerateCoastline();
-            //vertices = tempvertices.OrderBy(item => item.x).ThenBy(item => item.z).ToArray();
-            vertices = allPossibleVertices.ToArray();
+            tempvertices.Add(centerpoint);
+            borderlist = new List<Vector3>();
+            borderlist.Add(centerpoint);
+            GenerateCoastline();
+            vertices = tempvertices.OrderBy(item => item.x).ThenBy(item => item.z).ToArray();
+            //vertices = allPossibleVertices.ToArray();
             GenerateMesh();
             GetComponent<MeshFilter>().mesh = mesh;
         }
