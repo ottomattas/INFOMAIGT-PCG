@@ -61,11 +61,11 @@ public class TerrainGenerator : MonoBehaviour
         // starting from bottom left to right by row
         for (int i = 0; i < vertices.Length; i++)
         {
-            //if (coastvertices.Any(elem => elem.x == vertices[i].x && elem.z == vertices[i].z))
-            //{
+            if (coastvertices.Any(elem => elem.x == vertices[i].x && elem.z == vertices[i].z))
+            {
                 float newy = Mathf.PerlinNoise(vertices[i].x * .3f, vertices[i].z* .3f) * 2f;
                 vertices[i].y = newy;
-            //}
+            }
         }
         /*int i = 0;
 
