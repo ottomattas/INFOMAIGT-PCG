@@ -50,7 +50,7 @@ namespace Agents
             borderlist = new List<Vector3>();
             borderlist.Add(centerpoint);
             GenerateCoastline();
-            vertices = tempvertices.OrderBy(item => item.x).ThenBy(item => item.z).ToArray();
+            vertices = tempvertices.ToArray();
             //GenerateMesh();
             //GetComponent<MeshFilter>().mesh = mesh;
         }
@@ -70,7 +70,9 @@ namespace Agents
         void GenerateCoastline()
         {
             //First iteration LocationToExpand is the centerpoint
-            int tokens = 1250;
+
+            //Tokens = how many points will be raised above ground
+            int tokens = 600;
             for (int t = 0; t < tokens; t++)
             {
                 Vector3 LocationToExpand = GenerateSeed(borderlist);
@@ -104,12 +106,12 @@ namespace Agents
                         BestPoint = i;
                     }
                 }
+                tempvertices.Add(BestPoint);
                 if (!isBorder(LocationToExpand, tempvertices))
                 {
                     borderlist.Remove(LocationToExpand);
                 }
                 borderlist.Add(BestPoint);
-                tempvertices.Add(BestPoint);
             }
         }
 
@@ -178,8 +180,7 @@ namespace Agents
                 }
             }
             float distancescore = (float)System.Math.Pow(tempdistancescore, 2);
-            return Vector3.Distance(repulsor, EvaluationPoint) - Vector3.Distance(attractor, EvaluationPoint) 
-                + 3*distancescore;
+            return Vector3.Distance(repulsor, EvaluationPoint) - Vector3.Distance(attractor, EvaluationPoint);// + 3*distancescore;
         }
 
         void OnDrawGizmosSelected()
