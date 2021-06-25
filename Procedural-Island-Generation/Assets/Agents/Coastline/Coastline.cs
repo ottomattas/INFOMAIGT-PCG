@@ -20,7 +20,7 @@ namespace Agents
         public float centerX;
         public float centerZ;
         // Start is called before the first frame update
-        void Start()
+        void Awake()
         {
             //TODO: WE WANT 3 LISTS/ARRAYS; ALL POSSIBLE VERTICES (THIS IS THE ALLPOSSIBLEVERTICES),
             //LIST OF ALL VERTICES OF THE ISLAND (THIS IS VERTICES) AND THE VERTICES OF THE COAST.
@@ -32,8 +32,8 @@ namespace Agents
             //where to place the island
             GameObject ocean = GameObject.Find("Ocean");
             islandHeight = ocean.transform.position.y + 0.01f;
-            centerX = xSize/2;
-            centerZ = zSize/2;
+            centerX = 0;
+            centerZ = 0;
 
             //Create the list allPossibleVertices
             CreateAllVertices();
