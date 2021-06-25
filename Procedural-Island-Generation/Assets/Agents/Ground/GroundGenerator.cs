@@ -86,10 +86,15 @@ namespace Agents
                     float height10 = GetHeight(x + 1, z + 0, xSegments, zSegments, noiseOffset, noise);
                     float height11 = GetHeight(x + 1, z + 1, xSegments, zSegments, noiseOffset, noise);
 
-                    var vertex00 = new Vector3((x + 0)*xStep, height00*config.groundSize.y, (z + 0)*zStep);
-                    var vertex01 = new Vector3((x + 0)*xStep, height01*config.groundSize.y, (z + 1)*zStep);
-                    var vertex10 = new Vector3((x + 1)*xStep, height10*config.groundSize.y, (z + 0)*zStep);
-                    var vertex11 = new Vector3((x + 1)*xStep, height11*config.groundSize.y, (z + 1)*zStep);
+                    var vertex00 = new Vector3((x + 0)*xStep, AdjustHeight(), (z + 0)*zStep);
+                    var vertex01 = new Vector3((x + 0)*xStep, AdjustHeight(), (z + 1)*zStep);
+                    var vertex10 = new Vector3((x + 1)*xStep, AdjustHeight(), (z + 0)*zStep);
+                    var vertex11 = new Vector3((x + 1)*xStep, AdjustHeight(), (z + 1)*zStep);
+
+                    // var vertex00 = new Vector3((x + 0)*xStep, height00*config.groundSize.y, (z + 0)*zStep);
+                    // var vertex01 = new Vector3((x + 0)*xStep, height01*config.groundSize.y, (z + 1)*zStep);
+                    // var vertex10 = new Vector3((x + 1)*xStep, height10*config.groundSize.y, (z + 0)*zStep);
+                    // var vertex11 = new Vector3((x + 1)*xStep, height11*config.groundSize.y, (z + 1)*zStep);
 
                     draft.vertices[index0] = vertex00;
                     draft.vertices[index1] = vertex01;
@@ -140,5 +145,19 @@ namespace Agents
         {
             return Mathf.Clamp01(noise.GetNoise(x, y)*0.5f + 0.5f);
         }
+        /// <summary>
+        /// Update the height value based on coastline
+        /// </summary>
+        // public static float AdjustHeight()
+        // {
+        //     foreach (Vector3 vector in allPossibleVertices){  
+        //         Console.WriteLine(String.Format("{0},{0},{0}", vector.x, vector.y, vector.z));  
+        //     }
+        //     var query = (from vert in allPossibleVertices 
+        //                  where vert.y == "0"  
+        //                  select vert)  
+        //                 .Update(st => { st.y = "-1";}); 
+        //     Console.WriteLine("After update");
+        // }
     }
 }
