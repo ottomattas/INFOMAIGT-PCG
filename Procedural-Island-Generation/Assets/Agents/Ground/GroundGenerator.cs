@@ -27,15 +27,24 @@ namespace Agents
             Assert.IsTrue(config.groundSize.z > 0);
             Assert.IsTrue(config.cellSize > 0);
 
+            // Create an variable for an array of vertices with 3 points each
+            // Vector3[] coastlineVertices;
+            List<Vector3> allPossibleVertices;
+
+            // Get the coastline vertices
+            GameObject Coast = GameObject.Find("Coastline");
+            Coastline coastline = Coast.GetComponent<Coastline>();
+            allPossibleVertices = coastline.allPossibleVertices;
+            Debug.Log(allPossibleVertices.Count);
+
+            
+
             var noiseOffset = new Vector2(Random.Range(0f, 100f), Random.Range(0f, 100f));
 
             int xSegments = Mathf.FloorToInt(config.groundSize.x/config.cellSize);
             int zSegments = Mathf.FloorToInt(config.groundSize.z/config.cellSize);
 
-            // GameObject Coast = GameObject.Find("Coastline");
-            // Coastline coastline = Coast.GetComponent<Coastline>();
-            // List<Vector3> BorderList = coastline.borderlist;
-            //Comment
+            
 
             float xStep = config.groundSize.x/xSegments;
             float zStep = config.groundSize.z/zSegments;
