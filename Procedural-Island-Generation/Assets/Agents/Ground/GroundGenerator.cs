@@ -30,18 +30,9 @@ namespace Agents
 
             // Create an variable for an array of vertices with 3 points each
             // Vector3[] coastlineVertices;
-            List<Vector3> allPossibleVertices;
+            //List<Vector3> allPossibleVertices;
 
             // Get the coastline vertices
-            GameObject Coast = GameObject.Find("Coastline");
-            Coastline coastline = Coast.GetComponent<Coastline>();
-            allPossibleVertices = coastline.allPossibleVertices;
-            Debug.Log(allPossibleVertices.Count);
-
-            
-
-            var noiseOffset = new Vector2(Random.Range(0f, 100f), Random.Range(0f, 100f));
-
             GameObject Coast = GameObject.Find("Coastline");
             Coastline coastline = Coast.GetComponent<Coastline>();
             Vector3[] coastvertices = coastline.vertices;
@@ -51,41 +42,47 @@ namespace Agents
 
             
 
+            var noiseOffset = new Vector2(Random.Range(0f, 100f), Random.Range(0f, 100f));
+
+            
+
+            
+
             float xStep = 1;
             float zStep = 1;
             int vertexCount = allPossibleVertices.Count;
+
+            Debug.Log(vertexCount);
             var draft = new MeshDraft
             {
                 name = "Ground",
-                //vrtices = allPossibleVertices,
+                //vertices = allPossibleVertices,
                 vertices = new List<Vector3>(vertexCount),
                 triangles = new List<int>(vertexCount),
                 normals = new List<Vector3>(vertexCount),
                 colors = new List<Color>(vertexCount)
             };
 
-            for (int i = 0; i < vertexCount; i++)
+            /*for (int i = 0; i < vertexCount; i++)
             {
                 draft.vertices.Add(Vector3.zero);
                 draft.triangles.Add(0);
                 draft.normals.Add(Vector3.zero);
                 draft.colors.Add(Color.black);
-            }
+            }*/
 
             var noise = new FastNoise();
             noise.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
             noise.SetFrequency(config.noiseFrequency);
 
-            for (int x = 0; x < xSize; x++)
+            for (int z = 0; z < zSize; z++)
             {
-                for (int z = 0; z < zSize; z++)
+                for (int x = 0; x < xSize; x++)
                 {
-                    int index0 = 6*(x + z*xSize);
+                    int index0 = 4*(z + x*zSize);
                     int index1 = index0 + 1;
                     int index2 = index0 + 2;
                     int index3 = index0 + 3;
-                    int index4 = index0 + 4;
-                    int index5 = index0 + 5;
 
                     float height00 = GetHeight(x + 0, z + 0, xSize, zSize, noiseOffset, noise);
                     float height01 = GetHeight(x + 0, z + 1, xSize, zSize, noiseOffset, noise);
@@ -129,38 +126,37 @@ namespace Agents
                     {
                         vertex11 = new Vector3((x + 0)*xStep, -1, (z+0)*zStep);
                     }
-                    
-                    draft.vertices[index0] = vertex00;
-                    Debug.Log(index1);
-                    draft.vertices[index1] = vertex01;
-                    draft.vertices[index2] = vertex11;
-                    draft.vertices[index3] = vertex00;
-                    draft.vertices[index4] = vertex11;
-                    draft.vertices[index5] = vertex10;
 
-                    draft.colors[index0] = config.gradient.Evaluate(height00);
-                    draft.colors[index1] = config.gradient.Evaluate(height01);
-                    draft.colors[index2] = config.gradient.Evaluate(height11);
-                    draft.colors[index3] = config.gradient.Evaluate(height00);
-                    draft.colors[index4] = config.gradient.Evaluate(height11);
-                    draft.colors[index5] = config.gradient.Evaluate(height10);
+                    Debug.Log(index0);
+                    
+                    draft.vertices.Add(vertex00);
+                    draft.vertices.Add(vertex01);
+                    draft.vertices.Add(vertex11);
+                    draft.vertices.Add(vertex10);
+
+                    draft.colors.Add(config.gradient.Evaluate(height00));
+                    draft.colors.Add(config.gradient.Evaluate(height01));
+                    draft.colors.Add(config.gradient.Evaluate(height11));
+                    draft.colors.Add(config.gradient.Evaluate(height00));
+                    draft.colors.Add(config.gradient.Evaluate(height11));
+                    draft.colors.Add(config.gradient.Evaluate(height10));
 
                     Vector3 normal000111 = Vector3.Cross(vertex01 - vertex00, vertex11 - vertex00).normalized;
                     Vector3 normal001011 = Vector3.Cross(vertex11 - vertex00, vertex10 - vertex00).normalized;
 
-                    draft.normals[index0] = normal000111;
-                    draft.normals[index1] = normal000111;
-                    draft.normals[index2] = normal000111;
-                    draft.normals[index3] = normal001011;
-                    draft.normals[index4] = normal001011;
-                    draft.normals[index5] = normal001011;
+                    draft.normals.Add(normal000111);
+                    draft.normals.Add(normal000111);
+                    draft.normals.Add(normal000111);
+                    draft.normals.Add(normal001011);
+                    draft.normals.Add(normal001011);
+                    draft.normals.Add(normal001011);
 
-                    draft.triangles[index0] = index0;
-                    draft.triangles[index1] = index1;
-                    draft.triangles[index2] = index2;
-                    draft.triangles[index3] = index3;
-                    draft.triangles[index4] = index4;
-                    draft.triangles[index5] = index5;
+                    draft.triangles.Add(index0);
+                    draft.triangles.Add(index1);
+                    draft.triangles.Add(index2);
+                    draft.triangles.Add(index0);
+                    draft.triangles.Add(index2);
+                    draft.triangles.Add(index3);
                 }
             }
 
