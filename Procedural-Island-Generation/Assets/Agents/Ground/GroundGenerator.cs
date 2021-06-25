@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Assertions;
 using Random = UnityEngine.Random;
@@ -23,9 +24,9 @@ namespace Agents
 
         public static MeshDraft GroundDraft(Config config)
         {
-            Assert.IsTrue(config.groundSize.x > 0);
-            Assert.IsTrue(config.groundSize.z > 0);
-            Assert.IsTrue(config.cellSize > 0);
+            //Assert.IsTrue(config.groundSize.x > 0);
+            //Assert.IsTrue(config.groundSize.z > 0);
+            //Assert.IsTrue(config.cellSize > 0);
 
             // Create an variable for an array of vertices with 3 points each
             // Vector3[] coastlineVertices;
@@ -41,17 +42,22 @@ namespace Agents
 
             var noiseOffset = new Vector2(Random.Range(0f, 100f), Random.Range(0f, 100f));
 
-            int xSegments = Mathf.FloorToInt(config.groundSize.x/config.cellSize);
-            int zSegments = Mathf.FloorToInt(config.groundSize.z/config.cellSize);
+            GameObject Coast = GameObject.Find("Coastline");
+            Coastline coastline = Coast.GetComponent<Coastline>();
+            Vector3[] coastvertices = coastline.vertices;
+            List<Vector3> allPossibleVertices = coastline.allPossibleVertices;
+            int xSize = coastline.xSize;
+            int zSize = coastline.zSize;
 
             
 
-            float xStep = config.groundSize.x/xSegments;
-            float zStep = config.groundSize.z/zSegments;
-            int vertexCount = 6*xSegments*zSegments;
+            float xStep = 1;
+            float zStep = 1;
+            int vertexCount = allPossibleVertices.Count;
             var draft = new MeshDraft
             {
                 name = "Ground",
+                //vrtices = allPossibleVertices,
                 vertices = new List<Vector3>(vertexCount),
                 triangles = new List<int>(vertexCount),
                 normals = new List<Vector3>(vertexCount),
@@ -70,33 +76,62 @@ namespace Agents
             noise.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
             noise.SetFrequency(config.noiseFrequency);
 
-            for (int x = 0; x < xSegments; x++)
+            for (int x = 0; x < xSize; x++)
             {
-                for (int z = 0; z < zSegments; z++)
+                for (int z = 0; z < zSize; z++)
                 {
-                    int index0 = 6*(x + z*xSegments);
+                    int index0 = 6*(x + z*xSize);
                     int index1 = index0 + 1;
                     int index2 = index0 + 2;
                     int index3 = index0 + 3;
                     int index4 = index0 + 4;
                     int index5 = index0 + 5;
 
-                    float height00 = GetHeight(x + 0, z + 0, xSegments, zSegments, noiseOffset, noise);
-                    float height01 = GetHeight(x + 0, z + 1, xSegments, zSegments, noiseOffset, noise);
-                    float height10 = GetHeight(x + 1, z + 0, xSegments, zSegments, noiseOffset, noise);
-                    float height11 = GetHeight(x + 1, z + 1, xSegments, zSegments, noiseOffset, noise);
+                    float height00 = GetHeight(x + 0, z + 0, xSize, zSize, noiseOffset, noise);
+                    float height01 = GetHeight(x + 0, z + 1, xSize, zSize, noiseOffset, noise);
+                    float height10 = GetHeight(x + 1, z + 0, xSize, zSize, noiseOffset, noise);
+                    float height11 = GetHeight(x + 1, z + 1, xSize, zSize, noiseOffset, noise);
 
-                    var vertex00 = new Vector3((x + 0)*xStep, AdjustHeight(), (z + 0)*zStep);
-                    var vertex01 = new Vector3((x + 0)*xStep, AdjustHeight(), (z + 1)*zStep);
-                    var vertex10 = new Vector3((x + 1)*xStep, AdjustHeight(), (z + 0)*zStep);
-                    var vertex11 = new Vector3((x + 1)*xStep, AdjustHeight(), (z + 1)*zStep);
 
-                    // var vertex00 = new Vector3((x + 0)*xStep, height00*config.groundSize.y, (z + 0)*zStep);
-                    // var vertex01 = new Vector3((x + 0)*xStep, height01*config.groundSize.y, (z + 1)*zStep);
-                    // var vertex10 = new Vector3((x + 1)*xStep, height10*config.groundSize.y, (z + 0)*zStep);
-                    // var vertex11 = new Vector3((x + 1)*xStep, height11*config.groundSize.y, (z + 1)*zStep);
-
+                    Vector3 vertex00;
+                    Vector3 vertex01;
+                    Vector3 vertex10;
+                    Vector3 vertex11;
+                    if (coastvertices.Any(elem => elem.x == x + 0 && elem.z == z + 0))
+                    {
+                        vertex00 = new Vector3((x + 0)*xStep, height00*config.groundSize.y, (z + 0)*zStep);
+                    }
+                    else
+                    {
+                        vertex00 = new Vector3((x + 0)*xStep, -1, (z+0)*zStep);
+                    }
+                    if (coastvertices.Any(elem => elem.x == x + 0 && elem.z == z + 1))
+                    {
+                        vertex01 = new Vector3((x + 0)*xStep, height01*config.groundSize.y, (z + 1)*zStep);
+                    }
+                    else
+                    {
+                        vertex01 = new Vector3((x + 0)*xStep, -1, (z+1)*zStep);
+                    }
+                    if (coastvertices.Any(elem => elem.x == x + 1 && elem.z == z + 0))
+                    {
+                        vertex10 = new Vector3((x + 1)*xStep, height10*config.groundSize.y, (z + 0)*zStep);
+                    }
+                    else
+                    {
+                        vertex10 = new Vector3((x + 1)*xStep, -1, (z+0)*zStep);
+                    }
+                    if (coastvertices.Any(elem => elem.x == x + 1 && elem.z == z + 1))
+                    {
+                        vertex11 = new Vector3((x + 1)*xStep, height11*config.groundSize.y, (z + 1)*zStep);
+                    }
+                    else
+                    {
+                        vertex11 = new Vector3((x + 0)*xStep, -1, (z+0)*zStep);
+                    }
+                    
                     draft.vertices[index0] = vertex00;
+                    Debug.Log(index1);
                     draft.vertices[index1] = vertex01;
                     draft.vertices[index2] = vertex11;
                     draft.vertices[index3] = vertex00;
