@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44950044, g: 0.49649525, b: 0.5591459, a: 1}
+  m_IndirectSpecularColor: {r: 0.44949996, g: 0.4964949, b: 0.5591454, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -132,7 +132,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2315220910225237888, guid: fdd4dedc5896544a9a6b485dd4e76bdd, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2315220910225237890, guid: fdd4dedc5896544a9a6b485dd4e76bdd, type: 3}
       propertyPath: m_RootOrder
@@ -140,15 +140,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2315220910225237890, guid: fdd4dedc5896544a9a6b485dd4e76bdd, type: 3}
       propertyPath: m_LocalScale.x
-      value: 10
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 2315220910225237890, guid: fdd4dedc5896544a9a6b485dd4e76bdd, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 2315220910225237890, guid: fdd4dedc5896544a9a6b485dd4e76bdd, type: 3}
       propertyPath: m_LocalScale.z
-      value: 10
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 2315220910225237890, guid: fdd4dedc5896544a9a6b485dd4e76bdd, type: 3}
       propertyPath: m_LocalPosition.x
@@ -209,11 +209,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4405413770112856595, guid: 7e1397b5564b94d869f54a6a2ed3c9d3, type: 3}
       propertyPath: xSize
-      value: 100
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 4405413770112856595, guid: 7e1397b5564b94d869f54a6a2ed3c9d3, type: 3}
       propertyPath: zSize
-      value: 100
+      value: 150
+      objectReference: {fileID: 0}
+    - target: {fileID: 4405413770112856595, guid: 7e1397b5564b94d869f54a6a2ed3c9d3, type: 3}
+      propertyPath: centerX
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 4405413770112856595, guid: 7e1397b5564b94d869f54a6a2ed3c9d3, type: 3}
+      propertyPath: centerZ
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 4405413770112856605, guid: 7e1397b5564b94d869f54a6a2ed3c9d3, type: 3}
       propertyPath: m_RootOrder
@@ -368,6 +376,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1711306209}
   - component: {fileID: 1711306208}
+  - component: {fileID: 1711306210}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -432,6 +441,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 30, y: 20, z: 0}
+--- !u!114 &1711306210
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1711306207}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd5f47acbc40e4a5bbec5d4a735ef14f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1934051922
 GameObject:
   m_ObjectHideFlags: 0

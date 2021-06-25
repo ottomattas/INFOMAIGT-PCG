@@ -32,8 +32,8 @@ namespace Agents
             //where to place the island
             GameObject ocean = GameObject.Find("Ocean");
             islandHeight = ocean.transform.position.y + 0.01f;
-            centerX = 0;
-            centerZ = 0;
+            centerX = xSize / 2;
+            centerZ = zSize / 2;
 
             //Create the list allPossibleVertices
             CreateAllVertices();
@@ -72,7 +72,10 @@ namespace Agents
             //First iteration LocationToExpand is the centerpoint
 
             //Tokens = how many points will be raised above ground
-            int tokens = 1200;
+            System.Random r = new System.Random();
+            int LowerBound = System.Convert.ToInt32(allPossibleVertices.Count * 0.45);
+            int UpperBound = System.Convert.ToInt32(allPossibleVertices.Count * 0.9);
+            int tokens = r.Next(LowerBound, UpperBound);
             for (int t = 0; t < tokens; t++)
             {
                 Vector3 LocationToExpand = GenerateSeed(borderlist);
