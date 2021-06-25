@@ -15,6 +15,7 @@ namespace Agents
         public RectTransform leftPanel;
         public bool constantSeed = false;
         public GroundGenerator.Config config = new GroundGenerator.Config();
+        // public GroundGenerator_Original.Config config = new GroundGenerator_Original.Config();
         
         private const int minYSize = 1;
         private const int maxYSize = 10;
@@ -74,6 +75,7 @@ namespace Agents
             }
 
             var draft = GroundGenerator.GroundDraft(config);
+            // var draft = GroundGenerator_Original.GroundDraft(config);
             draft.Move(Vector3.left*config.groundSize.x/2 + Vector3.back*config.groundSize.z/2);
             AssignDraftToMeshFilter(draft, groundMeshFilter, ref groundMesh);
             groundMeshCollider.sharedMesh = groundMesh;
