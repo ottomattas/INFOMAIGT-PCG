@@ -23,8 +23,8 @@ public class TerrainGenerator : MonoBehaviour
     Mesh mesh;
 
     // Define parameters for the grid size
-    public int xSize = 50;
-    public int zSize = 50;
+    public int xSize;
+    public int zSize;
 
     // Use this for intialization
     void Start () {
@@ -32,6 +32,8 @@ public class TerrainGenerator : MonoBehaviour
         Coastline coastline = Coast.GetComponent<Coastline>();
         coastvertices = coastline.vertices;
         allPossibleVertices = coastline.allPossibleVertices.ToArray();
+        xSize = coastline.xSize;
+        zSize = coastline.zSize;
 
         // Create a new mesh object
         mesh = new Mesh();

@@ -15,8 +15,8 @@ namespace Agents
         public List<Vector3> tempvertices;
         public List<Vector3> borderlist;
         public float islandHeight;
-        public float xSize = 100;
-        public float zSize = 100;
+        public int xSize = 100;
+        public int zSize = 100;
         public float centerX;
         public float centerZ;
         // Start is called before the first frame update
@@ -72,7 +72,7 @@ namespace Agents
             //First iteration LocationToExpand is the centerpoint
 
             //Tokens = how many points will be raised above ground
-            int tokens = 600;
+            int tokens = 1200;
             for (int t = 0; t < tokens; t++)
             {
                 Vector3 LocationToExpand = GenerateSeed(borderlist);
