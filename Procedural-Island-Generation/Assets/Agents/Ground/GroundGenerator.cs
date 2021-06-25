@@ -32,9 +32,9 @@ namespace Agents
             int xSegments = Mathf.FloorToInt(config.groundSize.x/config.cellSize);
             int zSegments = Mathf.FloorToInt(config.groundSize.z/config.cellSize);
 
-            GameObject Coast = GameObject.Find("Coastline");
-            Coastline coastline = Coast.GetComponent<Coastline>();
-            List<Vector3> BorderList = coastline.borderlist;
+            // GameObject Coast = GameObject.Find("Coastline");
+            // Coastline coastline = Coast.GetComponent<Coastline>();
+            // List<Vector3> BorderList = coastline.borderlist;
             //Comment
 
             float xStep = config.groundSize.x/xSegments;
