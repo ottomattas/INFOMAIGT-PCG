@@ -1,6 +1,7 @@
-Part 1
+# Terrain Generation Agent - Part 1
 
-Description
+
+## Description
 
 In the lecture, we discussed several approaches to generating terrains. In this assignment, you will design a system for generating a specific type of terrain of your choice (islands, mountain ranges, river deltas, etc). It is very important that you base your system on solid research, so you will need to find sources relating to the generation of the type of terrain you have chosen. You should write a document of at most three pages containing at least the following information:
 
@@ -16,7 +17,7 @@ It is worth keeping in mind that in the next assignment, you will have to implem
 
 
 
-Evaluation
+## Evaluation
 
 Evaluation criteria are:
 
@@ -26,9 +27,9 @@ Realism: is the project realistically possible in the available time?
 Ambition: is the project challenging enough? Both the type of terrain and the method for generating it should not be trivial. For instance, most types of fractal terrain generation will be too easy to implement.
 Please feel free to ask questions in the lectures or on Teams if you are unsure about any aspects of the system you have in mind.
 
-Part 2
+# Terrain Generation Agent - Part 2
 
-Description
+## Description
 
 In the previous assignment, you designed a system for generating a type of terrain of your choice, and you received feedback on the feasibility of your design. In this assignment, you are going to implement your system. You should submit your implementation (both source and a compiled version, if applicable), as well as a document containing the following information:
 
@@ -42,7 +43,7 @@ Your program needs to run on a Windows 10 machine. You can either provide a comp
 While you are free to use any library you want for visualisation of your result, you are not allowed to use libraries to implement part of your terrain generation, unless with our explicit permission. If you indicated you will use a library in your design document and we didn't comment on this, you have our permission. Please contact us if you are unsure! Also, don't assume you can use a particular library if we gave another group permission to use it!
 
 
-Using the code
+## Using the code
 
 We supply a simple program based on the Panda3D library that can give a simple rendering of a heightmap. It is not required to use this program, but don't spend a lot of time on getting nice renderings of your results. For the groups that will not use heightmaps, an option could be to write a commandline program that exports the result to a model that can be opened in Blender.
 
@@ -50,7 +51,7 @@ The program has a Renderer class that sets up some basic lighting. It also has a
 
 
 
-Evaluation
+## Evaluation
 
 You will primarily be evaluated on the quality of the terrain you generate, and the degree to which you were successful in implementing your proposed system. If there was a need to deviate from your original proposal, you will also be evaluated on the explanation of the reasons behind this deviation. "Not enough time" can be a valid reason if your proposal was quite ambitious!
 
