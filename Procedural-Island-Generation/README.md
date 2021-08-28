@@ -1,6 +1,5 @@
 # Terrain Generation Agent - Part 1
 
-
 ## Description
 
 In the lecture, we discussed several approaches to generating terrains. In this assignment, you will design a system for generating a specific type of terrain of your choice (islands, mountain ranges, river deltas, etc). It is very important that you base your system on solid research, so you will need to find sources relating to the generation of the type of terrain you have chosen. You should write a document of at most three pages containing at least the following information:
@@ -15,8 +14,6 @@ Feel free to include some figures outside of the three-page limit.
 
 It is worth keeping in mind that in the next assignment, you will have to implement the system you designed. Think about whether this will be feasible as you work on this assignment, keeping in mind that you will be allowed to use a visualisation tool of your choice, as long as a compiled version runs on Windows 10 without installing any libraries (e.g. Unity; we will also provide a simple Python tool for visualisation that you can use if you want). That said, your proposed system should have sufficient complexity; "a flat, featureless desert" is not an acceptable type of terrain to try to generate. You should also think about the expected performance of your system; don't choose a method that takes hours to generate something acceptable.
 
-
-
 ## Evaluation
 
 Evaluation criteria are:
@@ -26,6 +23,7 @@ Detail: are all necessary details described? The document should give enough inf
 Realism: is the project realistically possible in the available time?
 Ambition: is the project challenging enough? Both the type of terrain and the method for generating it should not be trivial. For instance, most types of fractal terrain generation will be too easy to implement.
 Please feel free to ask questions in the lectures or on Teams if you are unsure about any aspects of the system you have in mind.
+
 
 # Terrain Generation Agent - Part 2
 
@@ -42,14 +40,11 @@ You are provided with a simple Python program that gives you some basic visualis
 Your program needs to run on a Windows 10 machine. You can either provide a compiled file, or your Python code. We will not compile your program from C#/C++ code.
 While you are free to use any library you want for visualisation of your result, you are not allowed to use libraries to implement part of your terrain generation, unless with our explicit permission. If you indicated you will use a library in your design document and we didn't comment on this, you have our permission. Please contact us if you are unsure! Also, don't assume you can use a particular library if we gave another group permission to use it!
 
-
 ## Using the code
 
 We supply a simple program based on the Panda3D library that can give a simple rendering of a heightmap. It is not required to use this program, but don't spend a lot of time on getting nice renderings of your results. For the groups that will not use heightmaps, an option could be to write a commandline program that exports the result to a model that can be opened in Blender.
 
 The program has a Renderer class that sets up some basic lighting. It also has a render_heightmap function that takes a numpy array with height values, the size of each grid cell, and an optional array of RGB colour values. The colour values should be in the range [0, 1], and the dtype of your numpy array should probably be something like (float, 3). If you don't supply a colour array, the terrain will simply be drawn in grey.
-
-
 
 ## Evaluation
 
