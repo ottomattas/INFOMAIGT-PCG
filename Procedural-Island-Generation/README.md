@@ -38,7 +38,7 @@ In the previous assignment, you designed a system for generating a type of terra
 - Any performance constraints; it should preferably take at most a few minutes to generate a terrain.
 - A description and discussion of the changes you had to make to your design, if applicable. Why were the changes necessary? Do they impact the quality and/or capabilities of your system?
 
-You are provided with a simple Python program (*heightmap-renderer.zip*) that gives you some basic visualisation tools, but **you are free to use any system you want for visualisation** (e.g. Unity). The only requirements are the following:
+You are provided with a simple Python program (*[heightmap-renderer.zip](./heightmap-renderer.zip)*) that gives you some basic visualisation tools, but **you are free to use any system you want for visualisation** (e.g. Unity). The only requirements are the following:
 
 - Your program needs to run on a Windows 10 machine. You can either provide **a compiled file, or your Python code**. We will not compile your program from C#/C++ code.
 - While you are free to use any library you want for visualisation of your result, you are **not allowed to use libraries to implement part of your terrain generation**, unless with our explicit permission. If you indicated you will use a library in your design document and we didn't comment on this, you have our permission. Please contact us if you are unsure! Also, don't assume you can use a particular library if we gave another group permission to use it!
