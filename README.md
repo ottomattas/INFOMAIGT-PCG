@@ -1,4 +1,6 @@
 # INFOMAIGT - PCG
+##### This is a submodule for the [INFOMAIGT](https://github.com/ottomattas/INFOMAIGT) repository.
+
 AI for Game Technology - Procedural Content Generation
 
 - Course description: http://www.cs.uu.nl/education/vak/INFOMAIGT
