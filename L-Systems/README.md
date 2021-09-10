@@ -4,11 +4,11 @@
 
 In the first lecture, you learned about L-systems, and how they can be used to model plants. In this assignment, you will come up with a number of axioms and production rules that produce interesting 2D plant models. It is completely up to you what kind of plant models you want to generate. Be creative! You will submit a document of at most three pages containing three L-systems (axioms, production rules and parameters). For each L-system, you should describe what kind of plant it generates, and how the combination of axiom, production rules and parameters achieves this. Be sure to include some images of your results (they will not count towards the page limit).
 
-We provide a simple Python program that can visualise non-parametric, context-free L-systems. For some "fancier" types of visualisation, you may want to modify these files.
+We provide a simple Python program (*[l-systems-template.zip](./l-systems-template.zip)*) that can visualise non-parametric, context-free L-systems. For some "fancier" types of visualisation, you may want to modify these files.
 
-You will be evaluated on the diversity and creativity of the L-systems you come up with, as well of the quality of your explanation on how they achieve the observed results. It is important that your three L-systems are sufficiently distinct; don't submit multiple systems that represent the same type of plant (e.g. three somewhat different types of trees). Your systems should also all include some randomness, they shouldn't generate the same model with every run.
+You will be evaluated on the diversity and creativity of the L-systems you come up with, as well of the quality of your explanation on how they achieve the observed results. It is important that your three L-systems are sufficiently distinct; don't submit multiple systems that represent the same type of plant (e.g. three somewhat different types of trees). **Your systems should also all include some randomness**, they shouldn't generate the same model with every run.
 
-Note that you will work on this project in pairs. You can sign up as a pair on the Groups page.
+Note that **you will work on this project in pairs**. You can sign up as a pair on the Groups page.
 
 ## How to use the code
 
