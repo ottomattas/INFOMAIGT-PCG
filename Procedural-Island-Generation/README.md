@@ -31,14 +31,15 @@ Please feel free to ask questions in the lectures or on Teams if you are unsure 
 
 In the previous assignment, you designed a system for generating a type of terrain of your choice, and you received feedback on the feasibility of your design. In this assignment, you are going to implement your system. You should submit your implementation (both source and a compiled version, if applicable), as well as a document containing the following information:
 
-A description of how to use your program, including any libraries we need to install in case you're using Python.
-Some examples of the results obtained, and the settings used to obtain them.
-Any performance constraints; it should preferably take at most a few minutes to generate a terrain.
-A description and discussion of the changes you had to make to your design, if applicable. Why were the changes necessary? Do they impact the quality and/or capabilities of your system?
-You are provided with a simple Python program that gives you some basic visualisation tools, but you are free to use any system you want for visualisation (e.g. Unity). The only requirements are the following:
+- A description of how to use your program, including any libraries we need to install in case you're using Python.
+- Some examples of the results obtained, and the settings used to obtain them.
+- Any performance constraints; it should preferably take at most a few minutes to generate a terrain.
+- A description and discussion of the changes you had to make to your design, if applicable. Why were the changes necessary? Do they impact the quality and/or capabilities of your system?
 
-Your program needs to run on a Windows 10 machine. You can either provide a compiled file, or your Python code. We will not compile your program from C#/C++ code.
-While you are free to use any library you want for visualisation of your result, you are not allowed to use libraries to implement part of your terrain generation, unless with our explicit permission. If you indicated you will use a library in your design document and we didn't comment on this, you have our permission. Please contact us if you are unsure! Also, don't assume you can use a particular library if we gave another group permission to use it!
+You are provided with a simple Python program (*heightmap-renderer.zip*) that gives you some basic visualisation tools, but **you are free to use any system you want for visualisation** (e.g. Unity). The only requirements are the following:
+
+- Your program needs to run on a Windows 10 machine. You can either provide **a compiled file, or your Python code**. We will not compile your program from C#/C++ code.
+- While you are free to use any library you want for visualisation of your result, you are **not allowed to use libraries to implement part of your terrain generation**, unless with our explicit permission. If you indicated you will use a library in your design document and we didn't comment on this, you have our permission. Please contact us if you are unsure! Also, don't assume you can use a particular library if we gave another group permission to use it!
 
 ## Using the code
 
@@ -50,4 +51,4 @@ The program has a Renderer class that sets up some basic lighting. It also has a
 
 You will primarily be evaluated on the quality of the terrain you generate, and the degree to which you were successful in implementing your proposed system. If there was a need to deviate from your original proposal, you will also be evaluated on the explanation of the reasons behind this deviation. "Not enough time" can be a valid reason if your proposal was quite ambitious!
 
-We want to explicitly state that the minimum requirement for passing is definitely not a fully working implementation of your entire proposal. As each individual proposal offered a different level of challenge, it's hard to give explicit grading guidelines, but typically a fully working implementation will result in a much better grade than a six.
+We want to explicitly state that the minimum requirement for passing is definitely **not** a fully working implementation of your entire proposal. As each individual proposal offered a different level of challenge, it's hard to give explicit grading guidelines, but typically a fully working implementation will result in a much better grade than a six.
