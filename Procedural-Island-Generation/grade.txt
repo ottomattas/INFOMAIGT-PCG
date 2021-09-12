@@ -1,0 +1,21 @@
+Part 1 - 9.0
+
+Overall I think this is a great idea for the project. You have good sources and
+the scope of what you're trying to implement is of sufficient size. Reading your
+document does leave me with two questions. First, how will the agents be divided
+into phases, and why? Second, you mention you will use a heightmap, but also
+that you want to use a low-poly style, and show images from Islanders. These two
+approaches don't seem inherently compatible, it would have been nice if you
+could have commented on how you plan to combine these two aspects.
+
+
+Part 2 - 3.0
+
+As you note yourself in your document, the system you ended up submitting does
+not generate convincing terrains. One program seems to generate a basic island
+shape with some hills, and the other seems to generate some type of fractal
+noise which is then thresholded to generate some islands. It is hard for me to
+be sure how your system actually works in the end, because you do not describe
+it in your document. In the end you seem to have a reasonable starting point for
+the basic island shape, but your terrain is severely lacking in features that
+make it interesting and/or realistic.

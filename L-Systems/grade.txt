@@ -1,0 +1,15 @@
+6.5
+
+I like the first two systems you came up with. The first exhibits good use of
+different symbols with different meanings, and the second one nicely uses
+randomness to make significantly different structures while retaining the same
+overall feel of the objects. The third system is quite simplistic, and mostly
+looks the same every time you generate it.
+
+I would have liked to see more elements in your systems that are not just
+branching structures, such as using the system to draw the outline of elements
+like flowers. I would have also liked the systems to respond better to varying
+the number of levels of the evaluation. The dandelion does this quite well,
+but the tumbleweed and the rye exhibit some strange behaviour: the tumbleweed
+starts to spiral around the space, and the rye gets some incredibly long
+straight branches.
